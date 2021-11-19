@@ -24,6 +24,7 @@ public class JDBCConnection {
 			System.out.println("connect failure!" ) ; 
 			ex.printStackTrace();
 		}
+		
 		return conn; 
 	}
 }
