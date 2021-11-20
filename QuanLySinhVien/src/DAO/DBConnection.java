@@ -1,9 +1,10 @@
-package jdbc;
+package DAO;
 
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class JDBCConnection {
+public class DBConnection {
 	public static Connection initializeDatabase() throws SQLException{
 		// Initialize all the information regarding 
 		// Database Connection
@@ -14,6 +15,8 @@ public class JDBCConnection {
 		String dbName = "QuanLyDonHang"; 
 		String dbUsername = "root";
 		String dbPassword = "12345"; 
+//		String dbUsername = "root";
+//		String dbPassword = "0945926575aA@"; 
 		String connectionURL = dbURL + "/" + dbName;
 		Connection conn = null;
 		try { 
