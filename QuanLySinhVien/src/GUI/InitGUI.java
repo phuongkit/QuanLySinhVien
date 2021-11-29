@@ -2,17 +2,17 @@ package GUI;
 
 import java.awt.Font;
 
-public class initGUI {
+public class InitGUI {
 	private int SCREEN_HEIGHT = 540;
 	private int SCCREEN_WIDTH = 960;
-	private int COMPONENTS_HEIGHT = 20;
+	private int COMPONENTS_HEIGHT = 40;
 	private int BUTTON_HEIGHT = 40;
 	private int BUTTON_WIDTH = 100;
 	private int SPACE = 10;
 	private String FONT_TYPE = "Tohoma";
 	private int FONT = Font.PLAIN;
 	private int FONT_SIZE = 16;
-	public initGUI() {
+	public InitGUI() {
 		
 	}
 	

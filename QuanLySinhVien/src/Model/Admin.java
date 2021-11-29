@@ -1,10 +1,10 @@
 package Model;
 
-public class Teacher extends Person{
-	public Teacher() {
+public class Admin extends Person{
+	public Admin() {
 		super();
 	}
-	public Teacher(Teacher x) {
+	public Admin(Admin x) {
 		super.setId(x.getId());
 		super.setName(x.getName());
 		super.setEmail(x.getEmail());
