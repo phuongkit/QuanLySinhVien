@@ -12,11 +12,11 @@ public class DBConnection {
 		String dbDriver = "com.mysql.cj.jdbc.Driver";
 		String dbURL = "jdbc:mysql://localhost:3306"; 
 		// Database name to access 
-		String dbName = "QuanLyDonHang"; 
+		String dbName = "QuanLySinhVien"; 
+		//String dbUsername = "root";
+		//String dbPassword = "12345"; 
 		String dbUsername = "root";
-		String dbPassword = "12345"; 
-//		String dbUsername = "root";
-//		String dbPassword = "0945926575aA@"; 
+		String dbPassword = "0945926575aA@"; 
 		String connectionURL = dbURL + "/" + dbName;
 		Connection conn = null;
 		try { 
