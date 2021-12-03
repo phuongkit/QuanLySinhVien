@@ -2,19 +2,26 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import DAO.DBConnection;
+import Model.Account;
 
 public class FrmLogin extends JFrame{
 	private static Connection conn = null;
@@ -77,6 +84,7 @@ public class FrmLogin extends JFrame{
 		
 		rbAdmin = new JRadioButton();
 		rbAdmin.setBounds(160, 138, 20, 40);
+		rbAdmin.setSelected(true);
 		pnlMain.add(rbAdmin);
 		
 		lblAdmin = new JLabel("Admin");
@@ -130,11 +138,68 @@ public class FrmLogin extends JFrame{
 		btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnLogin.setBounds(110, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Account ac = new Account();
+				String userName = txtUserName.getText();
+				String passWord = String.valueOf(pwfPassWord.getPassword());
+				int permission = 0;
+				if(rbAdmin.isSelected()) {
+					permission = 0;
+				}
+				else if(rbStudent.isSelected()) {
+					permission = 1;
+				}
+				else if(rbTeacher.isSelected()) {
+					permission = 2;
+				}
+				else {
+					JOptionPane.showMessageDialog(pnlMain, "Vui lòng chọn quyền trước khi đăng nhập",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				}
+				try {
+					if(ac.checkLogin(conn, userName, passWord, permission)) {
+						switch(permission) {
+						case 0:
+							GUI.Admin.FrmManHinhChinh frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(conn);
+							frmMHCAdmin.setVisible(true);
+							setVisible(false);
+							break;
+						case 1:
+							GUI.Student.FrmManHinhChinh frmMHCStudent = new GUI.Student.FrmManHinhChinh(conn);
+							frmMHCStudent.setVisible(true);
+							setVisible(false);
+							break;
+						default:
+							GUI.Teacher.FrmManHinhChinh frmMHCTeacher = new GUI.Teacher.FrmManHinhChinh(conn);
+							frmMHCTeacher.setVisible(true);
+							setVisible(false);
+							break;
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(pnlMain, "Tài khoản, mật khẩu hoặc quyền đăng nhập không đúng! Vui long kiểm tra lại!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				catch(Exception ex) {
+					ex.printStackTrace();
+					
+					JOptionPane.showMessageDialog(pnlMain, ex.getMessage(),  "Lỗi", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		pnlMain.add(btnLogin);
 		
 		btnExit = new JButton("Exit");
 		btnExit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnExit.setBounds(290, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int choose = JOptionPane.showConfirmDialog(pnlMain, "Bạn có muốn thoát!", "Thông tin", JOptionPane.OK_CANCEL_OPTION);
+				if(choose == JOptionPane.OK_OPTION) {
+					setVisible(false);
+				}
+			}
+		});
 		pnlMain.add(btnExit);
 		
 		// Frame Size
@@ -156,6 +221,12 @@ public class FrmLogin extends JFrame{
 		this.BUTTON_WIDTH = init.getBUTTON_WIDTH();
 	}
 	public static void main(String[] args) {
+		try {
+			conn = DBConnection.initializeDatabase();
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();
+		}
 		FrmLogin frmLogin = new FrmLogin();
 		frmLogin.setVisible(true);
 	}

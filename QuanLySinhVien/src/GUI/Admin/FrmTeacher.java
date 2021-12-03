@@ -67,22 +67,22 @@ public class FrmTeacher extends JFrame {
 	 * Launch the application.
 	 * @throws SQLException 
 	 */
-	public static void main(String[] args) throws SQLException {
-		
-		conn=DBConnection.initializeDatabase();
-		
-		load();
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrmTeacher frame = new FrmTeacher();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) throws SQLException {
+//		
+//		conn=DBConnection.initializeDatabase();
+//		
+//		load();
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					FrmTeacher frame = new FrmTeacher();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	
 	public void Init() {
 		InitGUI init = new InitGUI();
