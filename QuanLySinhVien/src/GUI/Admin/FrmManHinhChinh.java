@@ -41,6 +41,7 @@ public class FrmManHinhChinh extends JFrame{
 	private JDesktopPane desktopPane;
 
 	private FrmTeacher frmGV;
+	private FrmStudent frmSV;
 
 	public FrmManHinhChinh(Connection conn) {
 		Init();
@@ -132,7 +133,16 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLSinhVien = new JMenuItem("Quản Lý Sinh Viên");
 		mnItemQLSinhVien.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmSV == null || frmSV.isClosed()) {
+					frmSV = new FrmStudent(conn);
+					desktopPane.add(frmSV);
+					frmSV.setVisible(true);
+				}
+				frmSV.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmSV.setResizable(false);
 			}
 		});
 		mnQuanLy.add(mnItemQLSinhVien);
@@ -140,7 +150,6 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLLop = new JMenuItem("Quản Lý Lớp");
 		mnItemQLLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 			}
 		});
 		mnQuanLy.add(mnItemQLLop);

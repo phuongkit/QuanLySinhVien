@@ -92,6 +92,17 @@ INSERT INTO ACCOUNT VALUES(N'06', N'teacher3', N'12345', 2, NOW());
 INSERT INTO ACCOUNT VALUES(N'07', N'teacher4', N'12345', 2, NOW());
 INSERT INTO ACCOUNT VALUES(N'08', N'teacher5', N'12345', 2, NOW());
 INSERT INTO ACCOUNT VALUES(N'09', N'teacher6', N'12345', 2, NOW());
+INSERT INTO ACCOUNT VALUES(N'10',N'student1', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'11',N'student2', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'12',N'student3', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'13',N'student4', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'14',N'student5', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'15',N'student6', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'16',N'student7', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'17',N'student8', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'18',N'student9', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'19',N'student10', N'12345', 1, NOW());
+INSERT INTO ACCOUNT VALUES(N'20',N'student11', N'12345', 1, NOW());
 
 INSERT INTO TEACHER VALUES(N'01', N'Ngô Hiếu Thảo', N'thao1222@gmail.com', N'085395330', 'HCM', '02');
 INSERT INTO TEACHER VALUES(N'02', N'Ngô Trà My', N'tramy1999@gmail.com', N'093243430', 'HCM', '04');
@@ -100,3 +111,22 @@ INSERT INTO TEACHER VALUES(N'04', N'Huỳnh Chí Hữu', N'laohy12@gmail.com', N
 INSERT INTO TEACHER VALUES(N'05', N'Lê Gia Lộc', N'locxza@gmail.com', N'053595330', 'HCM', '07');
 INSERT INTO TEACHER VALUES(N'06', N'Nguyễn Trung', N'trungtrung12@gmail.com', N'054395330', 'HCM', '08');
 INSERT INTO TEACHER VALUES(N'07', N'Nguyễn Trung  Khánh Ka', N'trungka@gmail.com', N'08594533', 'HCM', '09');
+
+INSERT INTO FACULTY VALUES(N'01', N'Công nghệ thông tin');
+INSERT INTO FACULTY VALUES(N'02', N'Điện-Điện tử');
+INSERT INTO FACULTY VALUES(N'03', N'Công nghệ in');
+INSERT INTO FACULTY VALUES(N'04', N'Công nghệ may và thời trang');
+INSERT INTO FACULTY VALUES(N'05', N'Cơ khí chế tạo máy');
+
+INSERT INTO STUDENT VALUES(N'01', N'Ngô Hiếu Thảo', 0, NOW(), N'thao1222@gmail.com', N'085395330', 'HCM', '02', '01');
+INSERT INTO STUDENT VALUES(N'02', N'Ngô Chí Hiếu', 1, NOW(), N'hieupc@gmail.com', N'08654640', 'HCM', '10', '01');
+INSERT INTO STUDENT VALUES(N'03', N'Ngô Lê Hà', 0, NOW(), N'ha123@gmail.com', N'05646450', 'HCM', '11', '02');
+INSERT INTO STUDENT VALUES(N'04', N'Nguyễn Trung', 1, NOW(), N'trung1991@gmail.com', N'06546460', 'HCM', '12', '03');
+INSERT INTO STUDENT VALUES(N'05', N'Phan Khánh', 1, NOW(), N'khanhhai@gmail.com', N'65464654', 'HCM', '13', '04');
+INSERT INTO STUDENT VALUES(N'06', N'Phạm Thương', 1, NOW(), N'giathuong1@gmail.com', N'075474530', 'HCM', '14', '05');
+INSERT INTO STUDENT VALUES(N'07', N'Võ Văn Minh', 1, NOW(), N'minhkhe@gmail.com', N'0346346', 'HCM', '15', '02');
+INSERT INTO STUDENT VALUES(N'08', N'Lê Hiếu Thế', 1, NOW(), N'thehao@gmail.com', N'03535354', 'HCM', '16', '01');
+INSERT INTO STUDENT VALUES(N'09', N'Lê Hải Lưu', 0, NOW(), N'luugia@gmail.com', N'045353', 'HCM', '17', '01');
+INSERT INTO STUDENT VALUES(N'10', N'Lê Thị Như', 0, NOW(), N'nhu4232@gmail.com', N'01234134', 'HCM', '18', '04');
+INSERT INTO STUDENT VALUES(N'11', N'Hà Nam', 1, NOW(), N'namturw@gmail.com', N'0134123', 'HCM', '19', '01');
+INSERT INTO STUDENT VALUES(N'12', N'Ngô Trung', 1, NOW(), N'trung242gmail.com', N'043242143', 'HCM', '20', '01');

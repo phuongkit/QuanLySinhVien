@@ -1,5 +1,10 @@
 package Model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Student extends Person{
@@ -38,5 +43,130 @@ public class Student extends Person{
 	public void setFid(String fid) {
 		this.fid = fid;
 	}
-	
+	public static ArrayList<Student> load(Connection connection) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		ArrayList<Student> listStudents = new ArrayList<Student>();
+		Student sd =new Student();
+		try {
+			String query = "select * from Student"; 
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				sd.setId(resultSet.getString(1));
+				sd.setName(resultSet.getString(2));
+				sd.setGender(resultSet.getBoolean(3));
+				sd.setDateOfBirth(resultSet.getDate(4));
+				sd.setEmail(resultSet.getString(5));
+				sd.setPhone(resultSet.getString(6));
+				sd.setAddress(resultSet.getString(7));
+				sd.setAid(resultSet.getString(8));
+				sd.setFid(resultSet.getString(9));
+
+				listStudents.add(new Student(sd));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listStudents;
+	}
+	public static int Insert(Student sd, Connection conn) throws ClassNotFoundException, SQLException {
+
+		int rs = 0;
+		try  
+		{
+			String query = "Insert into Student values ( ? , ? , ? , ? , ? , ?, ?, ?, ?);";
+
+			PreparedStatement ps = conn.prepareStatement(query);
+
+			ps.setString(1, sd.getId());
+			ps.setString(2, sd.getName());
+			ps.setBoolean(3, sd.isGender());
+			ps.setDate(4, new java.sql.Date(sd.getDateOfBirth().getTime()));
+			ps.setString(5, sd.getEmail());
+			ps.setString(6, sd.getPhone());
+			ps.setString(7, sd.getAddress());
+			ps.setString(8, sd.getAid());
+			ps.setString(9, sd.getFid());
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	public static int Edit(Student sd,Connection conn) throws ClassNotFoundException, SQLException {
+		int rs = 0;
+		try  
+		{
+			String query = "Update Student set NAME = ?, GENDER = ?, DATEOFBIRTH = ?, EMAIL = ?, PHONE =?, ADDRESS =?, AID = ? , FID = ? where SID = ?";
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, sd.getName());
+			ps.setBoolean(2, sd.isGender());
+			ps.setDate(3, new java.sql.Date(sd.getDateOfBirth().getTime()));
+			ps.setString(4, sd.getEmail());
+			ps.setString(5, sd.getPhone());
+			ps.setString(6, sd.getAddress());
+			ps.setString(7, sd.getAid());
+			ps.setString(8, sd.getFid());
+			ps.setString(9, sd.getId());
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	public static int Del(String id,Connection conn) throws ClassNotFoundException, SQLException {
+
+		int rs = 0;
+		try  
+		{
+			PreparedStatement ps = null;
+			String query = "delete from Student where SID = ?";			
+			ps = conn.prepareStatement(query);
+
+			ps.setString(1,id);
+
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public static Student findStudent(String id,Connection conn) {
+		// TODO Auto-generated method stub
+		Student sd =new Student();
+		try {
+			String query = "select * from Student where SID = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, id);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				sd.setId(resultSet.getString(1));
+				sd.setName(resultSet.getString(2));
+				sd.setGender(resultSet.getBoolean(3));
+				sd.setDateOfBirth(resultSet.getDate(4));
+				sd.setEmail(resultSet.getString(5));
+				sd.setPhone(resultSet.getString(6));
+				sd.setAddress(resultSet.getString(7));
+				sd.setAid(resultSet.getString(8));
+				sd.setFid(resultSet.getString(9));
+				return sd;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

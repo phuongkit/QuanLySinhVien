@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -16,12 +17,12 @@ public class Account {
 	public Account() {
 		
 	}
-	public Account(String aid, String userName, String passWord, int permission, Date create_Date) {
-		this.aid = aid;
-		this.userName = userName;
-		this.passWord = passWord;
-		this.permission = permission;
-		this.create_Date = create_Date;
+	public Account(Account ac) {
+		this.aid = ac.aid;
+		this.userName = ac.userName;
+		this.passWord = ac.passWord;
+		this.permission = ac.permission;
+		this.create_Date = ac.create_Date;
 	}
 	public String getAid() {
 		return aid;
@@ -65,6 +66,120 @@ public class Account {
 			return true;
 		}
 		return false;
+	}
+	public static ArrayList<Account> load(Connection connection) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		ArrayList<Account> listAccounts = new ArrayList<Account>();
+		Account ac = new Account();
+		try {
+			String query = "select * from Account"; 
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				ac.setAid(resultSet.getString(1));
+				ac.setUserName(resultSet.getString(2));
+				ac.setPassWord(resultSet.getString(3));
+				ac.setPermission(resultSet.getInt(4));
+				ac.setCreate_Date(resultSet.getDate(5));
+
+				listAccounts.add(new Account(ac));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listAccounts;
+	}
+	public static int Insert(Account ac, Connection conn) throws ClassNotFoundException, SQLException {
+
+		int rs = 0;
+		try  
+		{
+			String query = "Insert into Account values ( ? , ? , ? , ?, ?);";
+
+			PreparedStatement ps = conn.prepareStatement(query);
+
+			ps.setString(1, ac.getAid());
+			ps.setString(2, ac.getUserName());
+			ps.setString(3, ac.getPassWord());
+			ps.setInt(4, ac.getPermission());
+			ps.setDate(5,  new java.sql.Date(ac.getCreate_Date().getTime()));
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	public static int Edit(Account ac,Connection conn) throws ClassNotFoundException, SQLException {
+
+		int rs = 0;
+		try  
+		{
+
+			String query = "Update Account set AID = ?, USERNAME = ?, PASSWORD = ?, PERMISSION = ?, CREATE_DATE = ? where AID = ?";
+
+			PreparedStatement ps = conn.prepareStatement(query);
+
+			ps.setString(1, ac.getUserName());
+			ps.setString(2, ac.getPassWord());
+			ps.setInt(3, ac.getPermission());
+			ps.setDate(4,  new java.sql.Date(ac.getCreate_Date().getTime()));
+			ps.setString(5, ac.getAid());
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	public static int Del(String id,Connection conn) throws ClassNotFoundException, SQLException {
+
+		int rs = 0;
+		try  
+		{
+			PreparedStatement ps = null;
+			String query = "delete from Account where AID = ?";			
+			ps = conn.prepareStatement(query);
+
+			ps.setString(1,id);
+
+
+			rs = ps.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public static Account findAccount(String id,Connection conn) {
+		// TODO Auto-generated method stub
+		Account ac =new Account();
+		try {
+			String query = "select * from Account where AID = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, id);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				ac.setAid(resultSet.getString(1));
+				ac.setUserName(resultSet.getString(2));
+				ac.setPassWord(resultSet.getString(3));
+				ac.setPermission(resultSet.getInt(4));
+				ac.setCreate_Date(resultSet.getDate(5));
+				return ac;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
 	
