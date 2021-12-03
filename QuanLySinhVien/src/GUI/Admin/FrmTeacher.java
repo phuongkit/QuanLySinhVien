@@ -1,12 +1,15 @@
 package GUI.Admin;
 
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -19,13 +22,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.cj.protocol.Message;
-
-import DAO.DBConnection;
 import GUI.InitGUI;
 import Model.Teacher;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 
 public class FrmTeacher extends JInternalFrame {
@@ -36,7 +35,7 @@ public class FrmTeacher extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private static Connection conn = null;
-	
+
 	private String FONT_TYPE;
 	private int FONT;
 	private int FONT_SIZE;
@@ -45,7 +44,7 @@ public class FrmTeacher extends JInternalFrame {
 	private int BUTTON_WIDTH;
 	private int SCREEN_HEIGHT;
 	private int SCREEN_WIDTH;
-	
+
 	private static JTextField txtID;
 	private static JTextField txtName;
 	private static JTextField txtEmail;
@@ -56,7 +55,6 @@ public class FrmTeacher extends JInternalFrame {
 	private static String[] columnName = {"TID", "Tên Giảng Viên", "Email", "Số Điện Thoại", "Địa Chỉ","AID"};
 	static DefaultTableModel model = new DefaultTableModel(columnName,0);
 	private static JTable tabTeacher = new JTable(model) ;
-	private static JButton btnExit = new JButton("Thoát");
 	private static JButton btnCancel = new JButton("Hủy");
 	private static JButton btnSave = new JButton("Lưu");
 	private static JButton btnDelete = new JButton("Xóa");
@@ -64,7 +62,7 @@ public class FrmTeacher extends JInternalFrame {
 	private static JButton btnCreate = new JButton("Thêm");
 	private static JButton btnEdit = new JButton("Sửa");
 	private static int flag = 0;
-	
+
 	public void Init() {
 		InitGUI init = new InitGUI();
 		this.FONT_TYPE = init.getFONT_TYPE();
@@ -76,8 +74,9 @@ public class FrmTeacher extends JInternalFrame {
 		this.SCREEN_WIDTH = init.getSCREEN_WIDTH();
 		this.SCREEN_HEIGHT=init.getSCREEN_HEIGHT();
 	}
-	
+
 	public FrmTeacher(Connection conn) {
+		((javax.swing.plaf.basic.BasicInternalFrameUI)this.getUI()).setNorthPane(null);
 		this.conn = conn;
 		Init();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,12 +84,12 @@ public class FrmTeacher extends JInternalFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		contentPane.setLayout(null);
-		
-		
+
+
 		tabTeacher.setBounds(10, 168, 870, 305);
-		
+
 		tabTeacher.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -104,74 +103,62 @@ public class FrmTeacher extends JInternalFrame {
 					txtCID.setText(tabTeacher.getValueAt(row, 5).toString());
 				}
 			}
-			
+
 		});
 		JScrollPane scrollPane = new JScrollPane(tabTeacher);
 		scrollPane.setBounds(0, 173, 955, 279);
 		contentPane.add(scrollPane);
-		
+
 		JLabel lblNewLabel = new JLabel("TID");
 		lblNewLabel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblNewLabel.setBounds(20, 20, 122, 38);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lblTnGingVin = new JLabel("Tên Giảng Viên");
 		lblTnGingVin.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblTnGingVin.setBounds(20, 56, 122, 38);
 		contentPane.add(lblTnGingVin);
-		
+
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblEmail.setBounds(20, 93, 122, 38);
 		contentPane.add(lblEmail);
-		
+
 		JLabel lblSinThoi = new JLabel("Số Điện Thoại");
 		lblSinThoi.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblSinThoi.setBounds(422, 20, 122, 38);
 		contentPane.add(lblSinThoi);
-		
+
 		JLabel lblNewLabel_1_1 = new JLabel("Địa Chỉ");
 		lblNewLabel_1_1.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblNewLabel_1_1.setBounds(422, 56, 122, 38);
 		contentPane.add(lblNewLabel_1_1);
-		
+
 		txtID = new JTextField();
 		txtID.setBounds(137, 27, 96, 27);
 		contentPane.add(txtID);
 		txtID.setColumns(10);
-		
+
 		txtName = new JTextField();
 		txtName.setColumns(10);
 		txtName.setBounds(137, 63, 237, 27);
 		contentPane.add(txtName);
-		
+
 		txtEmail = new JTextField();
 		txtEmail.setColumns(10);
 		txtEmail.setBounds(137, 100, 237, 27);
 		contentPane.add(txtEmail);
-		
+
 		txtSDT = new JTextField();
 		txtSDT.setColumns(10);
 		txtSDT.setBounds(539, 29, 237, 27);
 		contentPane.add(txtSDT);
-		
+
 		txtDiaChi = new JTextField();
 		txtDiaChi.setColumns(10);
 		txtDiaChi.setBounds(539, 65, 237, 27);
 		contentPane.add(txtDiaChi);
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int c = JOptionPane.showConfirmDialog(contentPane, "Bạn Có Muốn Thoát Không","Thông Báo",JOptionPane.YES_NO_OPTION);
-				if(c == JOptionPane.YES_OPTION)
-					setVisible(false);
-			}
-				
-		});
-		
-		
-		btnExit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnExit.setBounds(846, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
-		contentPane.add(btnExit);
+
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnFind.setEnabled(true);
@@ -183,10 +170,11 @@ public class FrmTeacher extends JInternalFrame {
 				txtID.setEnabled(true);
 			}
 		});
-		
-		
+
+
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnCancel.setBounds(731, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		contentPane.add(btnCancel);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -194,7 +182,7 @@ public class FrmTeacher extends JInternalFrame {
 					Add();
 				else if(flag == 1)
 					Edit();
-				
+
 				btnFind.setEnabled(true);
 				btnCreate.setEnabled(true);
 				btnEdit.setEnabled(true);
@@ -203,23 +191,25 @@ public class FrmTeacher extends JInternalFrame {
 				btnDelete.setEnabled(true);
 			}
 		});
-		
-		
+
+
 		btnSave.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnSave.setBounds(616, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnSave.setIcon(new ImageIcon("resources/save.jpg"));
 		contentPane.add(btnSave);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Del();
 			}
 		});
-		
-		
+
+
 		btnDelete.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnDelete.setBounds(499, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnDelete.setIcon(new ImageIcon("resources/delete.png"));
 		contentPane.add(btnDelete);
-		
-		
+
+
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				flag = 1; 
@@ -234,9 +224,10 @@ public class FrmTeacher extends JInternalFrame {
 		});
 		btnEdit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnEdit.setBounds(384, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnEdit.setIcon(new ImageIcon("resources/edit.png"));
 		contentPane.add(btnEdit);
-		
-		
+
+
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				flag = 0;
@@ -251,23 +242,26 @@ public class FrmTeacher extends JInternalFrame {
 		});
 		btnCreate.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnCreate.setBounds(269, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCreate.setIcon(new ImageIcon("resources/create.png"));
 		contentPane.add(btnCreate);
+
+		btnFind.setIcon(new ImageIcon("resources/find.png"));
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Find();
 			}
 		});
-		
-		
+
+
 		btnFind.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnFind.setBounds(154, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
 		contentPane.add(btnFind);
-		
+
 		JLabel lblNewLabel_1_1_1 = new JLabel("AID");
 		lblNewLabel_1_1_1.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblNewLabel_1_1_1.setBounds(422, 93, 122, 38);
 		contentPane.add(lblNewLabel_1_1_1);
-		
+
 		txtCID = new JTextField();
 		txtCID.setColumns(10);
 		txtCID.setBounds(539, 102, 237, 27);
@@ -278,20 +272,22 @@ public class FrmTeacher extends JInternalFrame {
 		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
 		lisTeacher = Teacher.load(conn);
 		DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
+		if(model.getRowCount() > 0) {
+			model.setRowCount(0);
+		}
 		Object[] rows = new Object[6];
-		
 		btnSave.setEnabled(false);
 		btnCancel.setEnabled(false);
 		for(int i=0; i <lisTeacher.size();i++ )
 		{    
-	        rows[0]=(lisTeacher.get(i).getId()); 
-	        rows[1]=(lisTeacher.get(i).getName()); 
-	        rows[2]=(lisTeacher.get(i).getEmail()); 
-	        rows[3]=(lisTeacher.get(i).getPhone()); 
-	        rows[4]=(lisTeacher.get(i).getAddress()); 
-	        rows[5]=(lisTeacher.get(i).getAid()); 
-	
-	        model.addRow(rows); 
+			rows[0]=(lisTeacher.get(i).getId()); 
+			rows[1]=(lisTeacher.get(i).getName()); 
+			rows[2]=(lisTeacher.get(i).getEmail()); 
+			rows[3]=(lisTeacher.get(i).getPhone()); 
+			rows[4]=(lisTeacher.get(i).getAddress()); 
+			rows[5]=(lisTeacher.get(i).getAid()); 
+
+			model.addRow(rows); 
 		}
 	}
 	public static void Add() {
@@ -312,7 +308,7 @@ public class FrmTeacher extends JInternalFrame {
 			}
 			else
 				JOptionPane.showMessageDialog(tabTeacher, "Thêm thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-			
+
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -320,7 +316,7 @@ public class FrmTeacher extends JInternalFrame {
 	}
 	public static void Edit() {
 		String[] teacher = new String[6];
-		
+
 		teacher[0] =txtID.getText().toString();
 		teacher[1] =txtName.getText().toString();
 		teacher[2] =txtEmail.getText().toString();
@@ -345,7 +341,7 @@ public class FrmTeacher extends JInternalFrame {
 						lisTeacher.get(i).setAddress(teacher[4]);
 						lisTeacher.get(i).setAid(teacher[5]);
 					}
-					
+
 				}
 				DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
 				model.setRowCount(0);
@@ -353,17 +349,17 @@ public class FrmTeacher extends JInternalFrame {
 			}
 			else
 				JOptionPane.showMessageDialog(tabTeacher, "Sửa thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-			
-			
+
+
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-			
+
 	}
 	public static void Del() {
 		String index=txtID.getText().toString();
-		
+
 		try {
 			if(Teacher.Del(index, conn)==1)
 			{
@@ -379,7 +375,7 @@ public class FrmTeacher extends JInternalFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 	}
 	public static void Find() {
 		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
@@ -390,13 +386,13 @@ public class FrmTeacher extends JInternalFrame {
 		if(Teacher.findTeacher(index, conn) != null) {
 			model.setRowCount(0);
 			rows[0]=(lisTeacher.get(Integer.valueOf(index)-1).getId()); 
-		    rows[1]=(lisTeacher.get(Integer.valueOf(index)-1).getName()); 
-		    rows[2]=(lisTeacher.get(Integer.valueOf(index)-1).getEmail()); 
-		    rows[3]=(lisTeacher.get(Integer.valueOf(index)-1).getPhone());
-		   	rows[4]=(lisTeacher.get(Integer.valueOf(index)-1).getAddress()); 
-		    rows[5]=(lisTeacher.get(Integer.valueOf(index)-1).getAid()); 
-		
-		    model.addRow(rows); 
+			rows[1]=(lisTeacher.get(Integer.valueOf(index)-1).getName()); 
+			rows[2]=(lisTeacher.get(Integer.valueOf(index)-1).getEmail()); 
+			rows[3]=(lisTeacher.get(Integer.valueOf(index)-1).getPhone());
+			rows[4]=(lisTeacher.get(Integer.valueOf(index)-1).getAddress()); 
+			rows[5]=(lisTeacher.get(Integer.valueOf(index)-1).getAid()); 
+
+			model.addRow(rows); 
 		}
 		else {
 			JOptionPane.showConfirmDialog(tabTeacher, "Không Tìm Thấy!!","Thông Báo",JOptionPane.OK_OPTION);

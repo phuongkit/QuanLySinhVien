@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 
+import javax.swing.DefaultDesktopManager;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
@@ -12,13 +15,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import GUI.*;
-import javax.swing.JDesktopPane;
+import GUI.FrmLogin;
+import GUI.InitGUI;
 
 public class FrmManHinhChinh extends JFrame{
 	private int SCREEN_HEIGHT;
 	private int SCREEN_WIDTH;
-	
+
 	private Connection conn;
 
 	private JPanel pnlMain;
@@ -37,6 +40,8 @@ public class FrmManHinhChinh extends JFrame{
 	private JMenuItem mnItemQLChiTietLop;
 	private JDesktopPane desktopPane;
 
+	private FrmTeacher frmGV;
+
 	public FrmManHinhChinh(Connection conn) {
 		Init();
 		this.conn = conn;
@@ -47,6 +52,7 @@ public class FrmManHinhChinh extends JFrame{
 
 		desktopPane = new JDesktopPane();
 		desktopPane.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		setNonMovableDesktopPane(desktopPane);
 		getContentPane().add(desktopPane);
 
 		menuBar = new JMenuBar();
@@ -112,9 +118,13 @@ public class FrmManHinhChinh extends JFrame{
 				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
 					frmChild.dispose();
 				}
-				FrmTeacher frmGV = new FrmTeacher(conn);
-				desktopPane.add(frmGV);
-				frmGV.setVisible(true);
+				if(frmGV == null || frmGV.isClosed()) {
+					frmGV = new FrmTeacher(conn);
+					desktopPane.add(frmGV);
+					frmGV.setVisible(true);
+				}
+				frmGV.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmGV.setResizable(false);
 			}
 		});
 		mnQuanLy.add(mnItemQLGiangVien);
@@ -144,7 +154,7 @@ public class FrmManHinhChinh extends JFrame{
 		mnQuanLy.add(mnItemQLChiTietLop);
 
 		// Frame Size
-		setSize(970, 600);
+		setSize(SCREEN_WIDTH+15, SCREEN_HEIGHT+65);
 		//setBounds(0, 0, FRM_WIDTH, FRM_HEIGHT);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		//setUndecorated(true);
@@ -156,5 +166,38 @@ public class FrmManHinhChinh extends JFrame{
 		InitGUI init = new InitGUI();
 		SCREEN_HEIGHT = init.getSCREEN_HEIGHT();
 		SCREEN_WIDTH = init.getSCREEN_WIDTH();
+	}
+	public void setNonMovableDesktopPane( JDesktopPane pPane )
+	{
+		JDesktopPane mNonMovableDesktopPane;
+		mNonMovableDesktopPane = pPane;
+		try
+		{
+			NonMovableDesktopManager d =
+					(NonMovableDesktopManager) mNonMovableDesktopPane.getDesktopManager();
+		}
+		catch( ClassCastException cce )
+		{
+			mNonMovableDesktopPane.setDesktopManager(new NonMovableDesktopManager());
+		}
+	}
+	private class NonMovableDesktopManager extends DefaultDesktopManager
+	{
+		/**
+		 * Moves the visible location of the frame being dragged
+		 * to the location specified. The means by which this occurs can vary depending
+		 * on the dragging algorithm being used. The actual logical location of the frame
+		 * might not change until <code>endDraggingFrame</code> is called.
+		 */
+		public void dragFrame(JComponent f, int newX, int newY) {
+		}
+
+		// implements javax.swing.DesktopManager
+		public void beginDraggingFrame(JComponent f) {
+		}
+
+		// implements javax.swing.DesktopManager
+		public void endDraggingFrame(JComponent f) {
+		}
 	}
 }
