@@ -4,7 +4,7 @@ import java.awt.Font;
 
 public class InitGUI {
 	private int SCREEN_HEIGHT = 540;
-	private int SCCREEN_WIDTH = 960;
+	private int SCREEN_WIDTH = 960;
 	private int COMPONENTS_HEIGHT = 40;
 	private int BUTTON_HEIGHT = 40;
 	private int BUTTON_WIDTH = 100;
@@ -22,11 +22,11 @@ public class InitGUI {
 	public void setSCREEN_HEIGHT(int sCREEN_HEIGHT) {
 		SCREEN_HEIGHT = sCREEN_HEIGHT;
 	}
-	public int getSCCREEN_WIDTH() {
-		return SCCREEN_WIDTH;
+	public int getSCREEN_WIDTH() {
+		return SCREEN_WIDTH;
 	}
-	public void setSCCREEN_WIDTH(int sCCREEN_WIDTH) {
-		SCCREEN_WIDTH = sCCREEN_WIDTH;
+	public void setSCCREEN_WIDTH(int sCREEN_WIDTH) {
+		SCREEN_WIDTH = sCREEN_WIDTH;
 	}
 	public int getCOMPONENTS_HEIGHT() {
 		return COMPONENTS_HEIGHT;

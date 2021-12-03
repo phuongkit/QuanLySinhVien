@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,7 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-public class FrmTeacher extends JFrame {
+public class FrmTeacher extends JInternalFrame {
 
 	/**
 	 * 
@@ -43,7 +44,7 @@ public class FrmTeacher extends JFrame {
 	private int BUTTON_HEIGHT;
 	private int BUTTON_WIDTH;
 	private int SCREEN_HEIGHT;
-	private int SCCREEN_WIDTH;
+	private int SCREEN_WIDTH;
 	
 	private static JTextField txtID;
 	private static JTextField txtName;
@@ -63,26 +64,6 @@ public class FrmTeacher extends JFrame {
 	private static JButton btnCreate = new JButton("Thêm");
 	private static JButton btnEdit = new JButton("Sửa");
 	private static int flag = 0;
-	/**
-	 * Launch the application.
-	 * @throws SQLException 
-	 */
-//	public static void main(String[] args) throws SQLException {
-//		
-//		conn=DBConnection.initializeDatabase();
-//		
-//		load();
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					FrmTeacher frame = new FrmTeacher();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 	
 	public void Init() {
 		InitGUI init = new InitGUI();
@@ -92,22 +73,15 @@ public class FrmTeacher extends JFrame {
 		this.COMPONENTS_HEIGHT = init.getCOMPONENTS_HEIGHT();
 		this.BUTTON_HEIGHT = init.getBUTTON_HEIGHT();
 		this.BUTTON_WIDTH = init.getBUTTON_WIDTH();
-		this.SCCREEN_WIDTH = init.getSCCREEN_WIDTH();
+		this.SCREEN_WIDTH = init.getSCREEN_WIDTH();
 		this.SCREEN_HEIGHT=init.getSCREEN_HEIGHT();
 	}
 	
-	
-	
-	
-	
-	
-	/**
-	 * Create the frame.
-	 */
-	public FrmTeacher() {
+	public FrmTeacher(Connection conn) {
+		this.conn = conn;
 		Init();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, SCCREEN_WIDTH, SCREEN_HEIGHT);
+		setBounds(100, 100, SCREEN_WIDTH, SCREEN_HEIGHT);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -298,6 +272,7 @@ public class FrmTeacher extends JFrame {
 		txtCID.setColumns(10);
 		txtCID.setBounds(539, 102, 237, 27);
 		contentPane.add(txtCID);
+		load();
 	}
 	public static void load() {
 		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
