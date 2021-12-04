@@ -102,10 +102,7 @@ public class Teacher extends Person{
 			PreparedStatement ps = null;
 			String query = "delete from teacher where TID = ?";			
 			ps = conn.prepareStatement(query);
-			
 			ps.setString(1,id);
-			
-			
 			rs = ps.executeUpdate();
 			
 		}

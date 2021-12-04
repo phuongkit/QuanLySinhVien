@@ -19,10 +19,11 @@ import GUI.FrmLogin;
 import GUI.InitGUI;
 
 public class FrmManHinhChinh extends JFrame{
-	private int SCREEN_HEIGHT;
-	private int SCREEN_WIDTH;
+	private static int SCREEN_HEIGHT;
+	private static int SCREEN_WIDTH;
 
-	private Connection conn;
+	private static Connection conn;
+	private static String userName;
 
 	private JPanel pnlMain;
 	private JMenuBar menuBar;
@@ -38,12 +39,14 @@ public class FrmManHinhChinh extends JFrame{
 	private JMenuItem mnItemQLSinhVien;
 	private JMenuItem mnItemQLLop;
 	private JMenuItem mnItemQLChiTietLop;
-	private JDesktopPane desktopPane;
+	private static JDesktopPane desktopPane;
 
-	private FrmTeacher frmGV;
-	private FrmStudent frmSV;
+	private static FrmPersonalInformation frmTTCN;
+	private static FrmTeacher frmGV;
+	private static FrmStudent frmSV;
 
-	public FrmManHinhChinh(Connection conn) {
+	public FrmManHinhChinh(Connection conn, String userName) {
+		this.userName = userName;
 		Init();
 		this.conn = conn;
 		setTitle("Màn hình chính - Admin");
@@ -65,7 +68,7 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemTaiKhoan = new JMenuItem("Tài Khoản Của Tôi");
 		mnTaiKhoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				Load();
 			}
 		});
 		mnTaiKhoan.add(mnItemTaiKhoan);
@@ -170,6 +173,19 @@ public class FrmManHinhChinh extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
+		Load();
+	}
+	public void Load() {
+		for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+			frmChild.dispose();
+		}
+		if(frmTTCN == null || frmTTCN.isClosed()) {
+			frmTTCN = new FrmPersonalInformation(conn, userName);
+			desktopPane.add(frmTTCN);
+			frmTTCN.setVisible(true);
+		}
+		frmTTCN.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		frmTTCN.setResizable(false);
 	}
 	public void Init() {
 		InitGUI init = new InitGUI();

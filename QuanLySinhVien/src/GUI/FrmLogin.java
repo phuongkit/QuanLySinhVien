@@ -160,17 +160,17 @@ public class FrmLogin extends JFrame{
 					if(ac.checkLogin(conn, userName, passWord, permission)) {
 						switch(permission) {
 						case 0:
-							GUI.Admin.FrmManHinhChinh frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(conn);
+							GUI.Admin.FrmManHinhChinh frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(conn, userName);
 							frmMHCAdmin.setVisible(true);
 							setVisible(false);
 							break;
 						case 1:
-							GUI.Student.FrmManHinhChinh frmMHCStudent = new GUI.Student.FrmManHinhChinh(conn);
+							GUI.Student.FrmManHinhChinh frmMHCStudent = new GUI.Student.FrmManHinhChinh(conn, userName);
 							frmMHCStudent.setVisible(true);
 							setVisible(false);
 							break;
 						default:
-							GUI.Teacher.FrmManHinhChinh frmMHCTeacher = new GUI.Teacher.FrmManHinhChinh(conn);
+							GUI.Teacher.FrmManHinhChinh frmMHCTeacher = new GUI.Teacher.FrmManHinhChinh(conn, userName);
 							frmMHCTeacher.setVisible(true);
 							setVisible(false);
 							break;

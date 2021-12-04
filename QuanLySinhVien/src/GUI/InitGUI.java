@@ -7,7 +7,7 @@ public class InitGUI {
 	private int SCREEN_WIDTH = 960;
 	private int COMPONENTS_HEIGHT = 40;
 	private int BUTTON_HEIGHT = 40;
-	private int BUTTON_WIDTH = 100;
+	private int BUTTON_WIDTH = 120;
 	private int SPACE = 10;
 	private String FONT_TYPE = "Tohoma";
 	private int FONT = Font.PLAIN;

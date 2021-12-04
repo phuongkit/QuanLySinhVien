@@ -160,7 +160,7 @@ public class Account {
 		return rs;
 	}
 
-	public static Account findAccount(String id,Connection conn) {
+	public static Account findAccount(String id,Connection conn)  throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
 		Account ac =new Account();
 		try {
@@ -172,6 +172,27 @@ public class Account {
 				ac.setAid(resultSet.getString(1));
 				ac.setUserName(resultSet.getString(2));
 				ac.setPassWord(resultSet.getString(3));
+				ac.setPermission(resultSet.getInt(4));
+				ac.setCreate_Date(resultSet.getDate(5));
+				return ac;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static Account findAccountofUserName(String userName,Connection conn)  throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		Account ac =new Account();
+		try {
+			String query = "select * from Account where USERNAME = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, userName);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				ac.setAid(resultSet.getString(1));
+				ac.setUserName(resultSet.getString(2));
+				ac.setPassWord("");
 				ac.setPermission(resultSet.getInt(4));
 				ac.setCreate_Date(resultSet.getDate(5));
 				return ac;
