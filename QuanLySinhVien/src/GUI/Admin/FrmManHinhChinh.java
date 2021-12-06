@@ -1,7 +1,13 @@
 package GUI.Admin;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.sql.Connection;
 
 import javax.swing.DefaultDesktopManager;
@@ -40,12 +46,17 @@ public class FrmManHinhChinh extends JFrame{
 	private JMenuItem mnItemQLLop;
 	private JMenuItem mnItemQLChiTietLop;
 	private static JDesktopPane desktopPane;
-
+	
+	private static FrmLogin frmLG;
 	private static FrmPersonalInformation frmTTCN;
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
 
-	public FrmManHinhChinh(Connection conn, String userName) {
+	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
+		frmTTCN = null;
+		frmGV = null;
+		frmSV = null;
+		this.frmLG = frmLG;
 		this.userName = userName;
 		Init();
 		this.conn = conn;
@@ -66,7 +77,7 @@ public class FrmManHinhChinh extends JFrame{
 		menuBar.add(mnTaiKhoan);
 
 		mnItemTaiKhoan = new JMenuItem("Tài Khoản Của Tôi");
-		mnTaiKhoan.addActionListener(new ActionListener() {
+		mnItemTaiKhoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Load();
 			}
@@ -87,9 +98,9 @@ public class FrmManHinhChinh extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int choose = JOptionPane.showConfirmDialog(pnlMain, "Bạn có muốn thoát!", "Thông tin", JOptionPane.OK_CANCEL_OPTION);
 				if(choose == JOptionPane.OK_OPTION) {
-					FrmLogin frmLG = new FrmLogin();
 					frmLG.setVisible(true);
 					setVisible(false);
+					dispose();
 				}
 			}
 		});
@@ -182,10 +193,10 @@ public class FrmManHinhChinh extends JFrame{
 		if(frmTTCN == null || frmTTCN.isClosed()) {
 			frmTTCN = new FrmPersonalInformation(conn, userName);
 			desktopPane.add(frmTTCN);
-			frmTTCN.setVisible(true);
 		}
 		frmTTCN.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		frmTTCN.setResizable(false);
+		frmTTCN.setVisible(true);
 	}
 	public void Init() {
 		InitGUI init = new InitGUI();

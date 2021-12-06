@@ -135,4 +135,26 @@ public class Teacher extends Person{
 		}
 		return null;
 	}
+	public static Teacher findTeacherofAID(String aid, Connection conn) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		Teacher tc = new Teacher();
+		try {
+			String query = "select * from Teacher where AID = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, aid);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				tc.setId(resultSet.getString(1));
+				tc.setName(resultSet.getString(2));
+				tc.setEmail(resultSet.getString(3));
+				tc.setPhone(resultSet.getString(4));
+				tc.setAddress(resultSet.getString(5));
+				tc.setAid(resultSet.getString(6));
+				return tc;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

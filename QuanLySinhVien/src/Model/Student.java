@@ -169,4 +169,29 @@ public class Student extends Person{
 		}
 		return null;
 	}
+	public static Student findStudentofAID(String aid, Connection conn) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		Student sd = new Student();
+		try {
+			String query = "select * from Student where AID = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, aid);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				sd.setId(resultSet.getString(1));
+				sd.setName(resultSet.getString(2));
+				sd.setGender(resultSet.getBoolean(3));
+				sd.setDateOfBirth(resultSet.getDate(4));
+				sd.setEmail(resultSet.getString(5));
+				sd.setPhone(resultSet.getString(6));
+				sd.setAddress(resultSet.getString(7));
+				sd.setAid(resultSet.getString(8));
+				sd.setFid(resultSet.getString(9));
+				return sd;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

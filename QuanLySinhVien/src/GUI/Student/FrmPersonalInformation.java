@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import Model.Account;
-import Model.Admin;
+import Model.Student;
 
 public class FrmPersonalInformation  extends JInternalFrame{
 	private static Connection conn = null;
@@ -241,19 +241,19 @@ public class FrmPersonalInformation  extends JInternalFrame{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		Admin ad = new Admin();
+		Student sd = new Student();
 		try {
-			ad = Admin.findAdminofAID(ac.getAid(), conn);
+			sd = Student.findStudentofAID(ac.getAid(), conn);
 		}catch(ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		txtID.setText(ad.getId());
-		txtName.setText(ad.getName());
-		txtEmail.setText(ad.getEmail());
-		txtPhone.setText(ad.getPhone());
-		txtAddress.setText(ad.getAddress());
-		txtAID.setText(ad.getAid());
+		txtID.setText(sd.getId());
+		txtName.setText(sd.getName());
+		txtEmail.setText(sd.getEmail());
+		txtPhone.setText(sd.getPhone());
+		txtAddress.setText(sd.getAddress());
+		txtAID.setText(sd.getAid());
 		txtUserName.setText(ac.getUserName());
 		switch(ac.getPermission()) {
 		case 0:

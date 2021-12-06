@@ -49,7 +49,13 @@ public class FrmLogin extends JFrame{
 	private JRadioButton rbTeacher;
 	private JButton btnLogin;
 	private JButton btnExit;
+	
+	private FrmLogin frmLG;
+	private GUI.Admin.FrmManHinhChinh frmMHCAdmin;
+	private GUI.Teacher.FrmManHinhChinh frmMHCTeacher;
+	private GUI.Student.FrmManHinhChinh frmMHCStudent;
 	public FrmLogin() {
+		frmLG = this;
 		setBackground(new Color(138, 43, 226));
 		Init();
 		setTitle("Form login");
@@ -162,17 +168,17 @@ public class FrmLogin extends JFrame{
 					if(ac.checkLogin(conn, userName, passWord, permission)) {
 						switch(permission) {
 						case 0:
-							GUI.Admin.FrmManHinhChinh frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(conn, userName);
+							frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(frmLG, conn, userName);
 							frmMHCAdmin.setVisible(true);
 							setVisible(false);
 							break;
 						case 1:
-							GUI.Student.FrmManHinhChinh frmMHCStudent = new GUI.Student.FrmManHinhChinh(conn, userName);
+							frmMHCStudent = new GUI.Student.FrmManHinhChinh(frmLG, conn, userName);
 							frmMHCStudent.setVisible(true);
 							setVisible(false);
 							break;
 						default:
-							GUI.Teacher.FrmManHinhChinh frmMHCTeacher = new GUI.Teacher.FrmManHinhChinh(conn, userName);
+							frmMHCTeacher = new GUI.Teacher.FrmManHinhChinh(frmLG, conn, userName);
 							frmMHCTeacher.setVisible(true);
 							setVisible(false);
 							break;

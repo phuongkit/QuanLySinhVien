@@ -108,7 +108,7 @@ INSERT INTO ACCOUNT VALUES(N'22', N'admin2', N'12345', 0, NOW());
 INSERT INTO ACCOUNT VALUES(N'23', N'admin3', N'12345', 0, NOW());
 INSERT INTO ACCOUNT VALUES(N'24', N'admin4', N'12345', 0, NOW());
 
-INSERT INTO TEACHER VALUES(N'01', N'Ngô Hiếu Thảo', N'thao1222@gmail.com', N'085395330', 'HCM', '02');
+INSERT INTO TEACHER VALUES(N'01', N'Ngô Hiếu Thảo', N'thao1222@gmail.com', N'085395330', 'HCM', '03');
 INSERT INTO TEACHER VALUES(N'02', N'Ngô Trà My', N'tramy1999@gmail.com', N'093243430', 'HCM', '04');
 INSERT INTO TEACHER VALUES(N'03', N'Định Thi Thiên', N'thien1901@gmail.com', N'02434330', 'HCM', '05');
 INSERT INTO TEACHER VALUES(N'04', N'Huỳnh Chí Hữu', N'laohy12@gmail.com', N'04234330', 'HCM', '06');
