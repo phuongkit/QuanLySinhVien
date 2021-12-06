@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -138,6 +139,7 @@ public class FrmLogin extends JFrame{
 		btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnLogin.setBounds(110, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnLogin.setIcon(new ImageIcon("resources/login.png"));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Account ac = new Account();
@@ -192,6 +194,7 @@ public class FrmLogin extends JFrame{
 		btnExit = new JButton("Exit");
 		btnExit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnExit.setBounds(290, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnExit.setIcon(new ImageIcon("resources/exit.png"));
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int choose = JOptionPane.showConfirmDialog(pnlMain, "Bạn có muốn thoát!", "Thông tin", JOptionPane.OK_CANCEL_OPTION);

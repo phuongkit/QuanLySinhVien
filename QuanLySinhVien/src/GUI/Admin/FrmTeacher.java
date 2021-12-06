@@ -170,12 +170,11 @@ public class FrmTeacher extends JInternalFrame {
 				txtID.setEnabled(true);
 			}
 		});
-
-
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnCancel.setBounds(731, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCancel.setBounds(814, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		contentPane.add(btnCancel);
+		
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(flag == 0)
@@ -191,24 +190,20 @@ public class FrmTeacher extends JInternalFrame {
 				btnDelete.setEnabled(true);
 			}
 		});
-
-
 		btnSave.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnSave.setBounds(616, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnSave.setBounds(654, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnSave.setIcon(new ImageIcon("resources/save.jpg"));
 		contentPane.add(btnSave);
+		
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Del();
 			}
 		});
-
-
 		btnDelete.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnDelete.setBounds(499, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnDelete.setBounds(493, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnDelete.setIcon(new ImageIcon("resources/delete.png"));
 		contentPane.add(btnDelete);
-
 
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -223,10 +218,9 @@ public class FrmTeacher extends JInternalFrame {
 			}
 		});
 		btnEdit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnEdit.setBounds(384, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnEdit.setBounds(332, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnEdit.setIcon(new ImageIcon("resources/edit.png"));
 		contentPane.add(btnEdit);
-
 
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -241,7 +235,7 @@ public class FrmTeacher extends JInternalFrame {
 			}
 		});
 		btnCreate.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnCreate.setBounds(269, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCreate.setBounds(171, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnCreate.setIcon(new ImageIcon("resources/create.png"));
 		contentPane.add(btnCreate);
 
@@ -251,10 +245,8 @@ public class FrmTeacher extends JInternalFrame {
 				Find();
 			}
 		});
-
-
 		btnFind.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnFind.setBounds(154, 453, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnFind.setBounds(10, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		contentPane.add(btnFind);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("AID");

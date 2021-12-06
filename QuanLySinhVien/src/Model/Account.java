@@ -183,7 +183,8 @@ public class Account {
 	}
 	public static Account findAccountofUserName(String userName,Connection conn)  throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
-		Account ac =new Account();
+		Account ac = new Account();
+		String ID = "";
 		try {
 			String query = "select * from Account where USERNAME = ?"; 
 			PreparedStatement ps = conn.prepareStatement(query);
@@ -192,7 +193,7 @@ public class Account {
 			if (resultSet.next()) {
 				ac.setAid(resultSet.getString(1));
 				ac.setUserName(resultSet.getString(2));
-				ac.setPassWord("");
+				ac.setPassWord(resultSet.getString(3));
 				ac.setPermission(resultSet.getInt(4));
 				ac.setCreate_Date(resultSet.getDate(5));
 				return ac;

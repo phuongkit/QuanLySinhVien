@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ import Model.Admin;
 public class FrmPersonalInformation  extends JInternalFrame{
 	private static Connection conn = null;
 	private static String userName;
+	private static String ID;
 	private static SimpleDateFormat formatter;
 
 	private String FONT_TYPE;
@@ -40,7 +42,7 @@ public class FrmPersonalInformation  extends JInternalFrame{
 	private int SCREEN_HEIGHT;
 	private int SCREEN_WIDTH;
 
-	private JPanel contentPane;
+	private static JPanel contentPane;
 	private static JTextField txtID;
 	private static JTextField txtName;
 	private static JTextField txtEmail;
@@ -167,7 +169,7 @@ public class FrmPersonalInformation  extends JInternalFrame{
 		txtDateCreate.setBounds(638, 355, 163, 19);
 		contentPane.add(txtDateCreate);
 
-		btnUpdate = new JButton("Cập nhật");
+		btnUpdate = new JButton("Sửa");
 		btnUpdate.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnUpdate.setBounds(190, 439, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnUpdate.setIcon(new ImageIcon("resources/update.jpg"));
@@ -195,7 +197,7 @@ public class FrmPersonalInformation  extends JInternalFrame{
 		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Cancel();
 			}
 		});
 		contentPane.add(btnCancel);
@@ -207,11 +209,12 @@ public class FrmPersonalInformation  extends JInternalFrame{
 		
 		txtAID = new JTextField();
 		txtAID.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		txtAID.setEnabled(false);
+		txtAID.setEditable(false);
 		txtAID.setColumns(10);
 		txtAID.setBounds(638, 57, 121, 19);
 		contentPane.add(txtAID);
 		Load();
+		ID = txtID.getText();
 	}
 	public void Init() {
 		InitGUI init = new InitGUI();
@@ -280,6 +283,18 @@ public class FrmPersonalInformation  extends JInternalFrame{
 		btnCancel.setEnabled(true);
 	}
 	public static void Save() {
+		try {
+			Admin ad = Admin.findAdmin(ID, conn);
+			ad.setName(txtName.getText());
+			ad.setEmail(txtEmail.getText());
+			ad.setPhone(txtPhone.getText());
+			ad.setAddress(txtAddress.getText());
+			Admin.Edit(ad, conn);
+			JOptionPane.showMessageDialog(contentPane, "Cập nhật thông tin thành công!",  "Thong Bao", JOptionPane.INFORMATION_MESSAGE);
+		} catch(ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Load();
 	}
 	public static void Cancel() {
