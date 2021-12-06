@@ -1,13 +1,7 @@
 package GUI.Admin;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.sql.Connection;
 
 import javax.swing.DefaultDesktopManager;
@@ -48,15 +42,17 @@ public class FrmManHinhChinh extends JFrame{
 	private static JDesktopPane desktopPane;
 	
 	private static FrmLogin frmLG;
+	private static FrmManHinhChinh frmMHC;
 	private static FrmPersonalInformation frmTTCN;
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
 
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
-		frmTTCN = null;
-		frmGV = null;
-		frmSV = null;
 		this.frmLG = frmLG;
+		this.frmMHC = this;
+		this.frmTTCN = null;
+		this.frmGV = null;
+		this.frmSV = null;
 		this.userName = userName;
 		Init();
 		this.conn = conn;
@@ -87,8 +83,8 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemDoiMatKhau = new JMenuItem("Đổi Mật Khẩu");
 		mnItemDoiMatKhau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-
+				FrmChangePassword frmCP = new FrmChangePassword(frmLG, frmMHC, conn, userName);
+				frmCP.setVisible(true);
 			}
 		});
 		mnTaiKhoan.add(mnItemDoiMatKhau);

@@ -165,7 +165,7 @@ public class FrmLogin extends JFrame{
 					JOptionPane.showMessageDialog(pnlMain, "Vui lòng chọn quyền trước khi đăng nhập",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 				}
 				try {
-					if(ac.checkLogin(conn, userName, passWord, permission)) {
+					if(ac.checkLogin(userName, passWord, permission, conn)) {
 						switch(permission) {
 						case 0:
 							frmMHCAdmin = new GUI.Admin.FrmManHinhChinh(frmLG, conn, userName);

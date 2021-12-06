@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import GUI.FrmLogin;
 import GUI.InitGUI;
-import GUI.Teacher.FrmPersonalInformation;
+import GUI.Teacher.*;
 
 public class FrmManHinhChinh  extends JFrame{
 	private static int SCREEN_HEIGHT;
@@ -36,10 +36,12 @@ public class FrmManHinhChinh  extends JFrame{
 	private static JDesktopPane desktopPane;
 
 	private static FrmLogin frmLG;
+	private static FrmManHinhChinh frmMHC;
 	private static FrmPersonalInformation frmTTCN;
 
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
-		frmTTCN = null;
+		this.frmMHC = this;
+		this.frmTTCN = null;
 		this.frmLG = frmLG;
 		this.userName = userName;
 		Init();
@@ -71,8 +73,8 @@ public class FrmManHinhChinh  extends JFrame{
 		mnItemDoiMatKhau = new JMenuItem("Đổi Mật Khẩu");
 		mnItemDoiMatKhau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-
+				FrmChangePassword frmCP = new FrmChangePassword(frmLG, frmMHC, conn, userName);
+				frmCP.setVisible(true);
 			}
 		});
 		mnTaiKhoan.add(mnItemDoiMatKhau);

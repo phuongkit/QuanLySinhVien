@@ -54,7 +54,7 @@ public class Account {
 	public void setCreate_Date(Date create_Date) {
 		this.create_Date = create_Date;
 	}
-	public boolean checkLogin(Connection conn, String userName, String passWord, int permission) throws SQLException{
+	public static boolean checkLogin(String userName, String passWord, int permission, Connection conn) throws SQLException{
 		String sql = "select * from Account where username = ? and password = ? and permission = ?";
 		PreparedStatement pstm = conn.prepareStatement(sql);
 		pstm.setString(1, userName);
@@ -114,23 +114,33 @@ public class Account {
 		return rs;
 	}
 	public static int Edit(Account ac,Connection conn) throws ClassNotFoundException, SQLException {
-
 		int rs = 0;
 		try  
 		{
-
 			String query = "Update Account set AID = ?, USERNAME = ?, PASSWORD = ?, PERMISSION = ?, CREATE_DATE = ? where AID = ?";
-
 			PreparedStatement ps = conn.prepareStatement(query);
-
 			ps.setString(1, ac.getUserName());
 			ps.setString(2, ac.getPassWord());
 			ps.setInt(3, ac.getPermission());
 			ps.setDate(4,  new java.sql.Date(ac.getCreate_Date().getTime()));
 			ps.setString(5, ac.getAid());
-
 			rs = ps.executeUpdate();
-
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	public static int UpdatePassWord(String userName, String newPassword ,Connection conn) throws ClassNotFoundException, SQLException {
+		int rs = 0;
+		try  
+		{
+			String query = "Update Account set PASSWORD = ? where UserName = ?";
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, newPassword);
+			ps.setString(2, userName);
+			rs = ps.executeUpdate();
 		}
 		catch(SQLException e)
 		{
