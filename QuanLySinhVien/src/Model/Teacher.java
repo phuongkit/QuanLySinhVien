@@ -74,7 +74,7 @@ public class Teacher extends Person{
 		try  
 		{
 			
-			String query = "Update teacher set NAME = ?, EMAIL = ?, PHONE =?, ADDRESS =?, CID =? where TID = ?";
+			String query = "Update teacher set NAME = ?, EMAIL = ?, PHONE =?, ADDRESS =?, AID =? where TID = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
 			

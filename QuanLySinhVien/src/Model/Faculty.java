@@ -115,7 +115,7 @@ public class Faculty{
 		return rs;
 	}
 
-	public static Faculty findFaculty(String id,Connection conn) {
+	public static Faculty findFaculty(String id,Connection conn) throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
 		Faculty sd =new Faculty();
 		try {
