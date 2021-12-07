@@ -378,6 +378,7 @@ public class FrmStudent extends JInternalFrame {
 		load();
 	}
 	public static void load() {
+		txtID.setEnabled(true);
 		ArrayList<Student> lisStudent = new ArrayList<Student>();
 		try {
 			lisStudent = Student.load(conn);

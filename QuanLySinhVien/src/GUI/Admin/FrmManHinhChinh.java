@@ -44,6 +44,7 @@ public class FrmManHinhChinh extends JFrame{
 	private static FrmLogin frmLG;
 	private static FrmManHinhChinh frmMHC;
 	private static FrmPersonalInformation frmTTCN;
+	private static FrmAccount frmAC;
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
 
@@ -118,7 +119,16 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLTaiKhoan = new JMenuItem("Quản Lý Tài Khoản");
 		mnItemQLTaiKhoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmAC == null || frmAC.isClosed()) {
+					frmAC = new FrmAccount(conn);
+					desktopPane.add(frmAC);
+					frmAC.setVisible(true);
+				}
+				frmAC.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmAC.setResizable(false);
 			}
 		});
 		mnQuanLy.add(mnItemQLTaiKhoan);

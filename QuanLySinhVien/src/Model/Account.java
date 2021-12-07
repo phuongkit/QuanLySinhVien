@@ -117,7 +117,7 @@ public class Account {
 		int rs = 0;
 		try  
 		{
-			String query = "Update Account set AID = ?, USERNAME = ?, PASSWORD = ?, PERMISSION = ?, CREATE_DATE = ? where AID = ?";
+			String query = "Update Account set USERNAME = ?, PASSWORD = ?, PERMISSION = ?, CREATE_DATE = ? where AID = ?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, ac.getUserName());
 			ps.setString(2, ac.getPassWord());

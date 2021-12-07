@@ -261,6 +261,7 @@ public class FrmTeacher extends JInternalFrame {
 		load();
 	}
 	public static void load() {
+		txtID.setEnabled(true);
 		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
 		lisTeacher = Teacher.load(conn);
 		DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
