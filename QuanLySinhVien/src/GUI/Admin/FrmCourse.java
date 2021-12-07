@@ -1,33 +1,44 @@
 package GUI.Admin;
 
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
+
 import GUI.InitGUI;
-import Model.Teacher;
-import javax.swing.ImageIcon;
+import Model.Account;
+import Model.Faculty;
+import Model.Course;
 
-
-public class FrmTeacher extends JInternalFrame {
+public class FrmCourse extends JInternalFrame {
 
 	/**
 	 * 
@@ -47,14 +58,13 @@ public class FrmTeacher extends JInternalFrame {
 
 	private static JTextField txtID;
 	private static JTextField txtName;
-	private static JTextField txtEmail;
-	private static JTextField txtSDT;
-	private static JTextField txtDiaChi;
-	private static JTextField txtCID;
-	private static ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
-	private static String[] columnName = {"TID", "Tên Giảng Viên", "Email", "Số Điện Thoại", "Địa Chỉ","AID"};
-	static DefaultTableModel model = new DefaultTableModel(columnName,0);
-	private static JTable tabTeacher = new JTable(model) ;
+	private static JTextField txtDescription;
+	private static JComboBox cbbNumberOfCredits;
+	private static DefaultComboBoxModel cbbNumberOfCreditsModel;
+	private static ArrayList<Course> lisCourse = new ArrayList<Course>();
+	private static String[] columnName = {"CID", "Tên Khóa Học", "Mô Tả", "Số Tín Chỉ"};
+	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
+	private static JTable tabCourse = new JTable(model) ;
 	private static JButton btnCancel = new JButton("Hủy");
 	private static JButton btnSave = new JButton("Lưu");
 	private static JButton btnDelete = new JButton("Xóa");
@@ -75,9 +85,9 @@ public class FrmTeacher extends JInternalFrame {
 		this.SCREEN_HEIGHT=init.getSCREEN_HEIGHT();
 	}
 
-	public FrmTeacher(Connection conn) {
+	public FrmCourse(Connection conn) {
 		((javax.swing.plaf.basic.BasicInternalFrameUI)this.getUI()).setNorthPane(null);
-		this.conn = conn;
+		FrmCourse.conn = conn;
 		Init();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -87,77 +97,76 @@ public class FrmTeacher extends JInternalFrame {
 
 		contentPane.setLayout(null);
 
+		tabCourse.setBounds(10, 168, 870, 305);
 
-		tabTeacher.setBounds(10, 168, 870, 305);
-
-		tabTeacher.addMouseListener(new MouseAdapter() {
+		tabCourse.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row = tabTeacher.getSelectedRow();
+				int row = tabCourse.getSelectedRow();
 				if(row != -1) {
-					txtID.setText(tabTeacher.getValueAt(row, 0).toString());
-					txtName.setText(tabTeacher.getValueAt(row, 1).toString());
-					txtEmail.setText(tabTeacher.getValueAt(row, 2).toString());
-					txtSDT.setText(tabTeacher.getValueAt(row, 3).toString());
-					txtDiaChi.setText(tabTeacher.getValueAt(row, 4).toString());
-					txtCID.setText(tabTeacher.getValueAt(row, 5).toString());
+					txtID.setText(tabCourse.getValueAt(row, 0).toString());
+					txtName.setText(tabCourse.getValueAt(row, 1).toString());
+					txtDescription.setText(tabCourse.getValueAt(row, 2).toString());
+					int numberOfCredits = Integer.valueOf(tabCourse.getValueAt(row, 3).toString());
+					cbbNumberOfCredits.setSelectedIndex(numberOfCredits - 1);
 				}
 			}
 
 		});
-		JScrollPane scrollPane = new JScrollPane(tabTeacher);
+		JScrollPane scrollPane = new JScrollPane(tabCourse);
 		scrollPane.setBounds(0, 173, 955, 279);
 		contentPane.add(scrollPane);
 
-		JLabel lblNewLabel = new JLabel("TID");
+		JLabel lblNewLabel = new JLabel("CID");
 		lblNewLabel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblNewLabel.setBounds(20, 20, 122, 38);
 		contentPane.add(lblNewLabel);
 
-		JLabel lblTnGingVin = new JLabel("Tên Giảng Viên");
+		JLabel lblTnGingVin = new JLabel("Tên Khóa Học");
 		lblTnGingVin.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblTnGingVin.setBounds(20, 56, 122, 38);
+		lblTnGingVin.setBounds(20, 107, 122, 38);
 		contentPane.add(lblTnGingVin);
 
-		JLabel lblEmail = new JLabel("Email");
+		JLabel lblEmail = new JLabel("Mô Tả");
 		lblEmail.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblEmail.setBounds(20, 93, 122, 38);
+		lblEmail.setBounds(474, 20, 122, 38);
 		contentPane.add(lblEmail);
 
-		JLabel lblSinThoi = new JLabel("Số Điện Thoại");
+		JLabel lblSinThoi = new JLabel("Số Tín Chỉ");
 		lblSinThoi.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblSinThoi.setBounds(422, 20, 122, 38);
+		lblSinThoi.setBounds(474, 102, 122, 38);
 		contentPane.add(lblSinThoi);
 
-		JLabel lblNewLabel_1_1 = new JLabel("Địa Chỉ");
-		lblNewLabel_1_1.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblNewLabel_1_1.setBounds(422, 56, 122, 38);
-		contentPane.add(lblNewLabel_1_1);
-
 		txtID = new JTextField();
-		txtID.setBounds(137, 27, 96, 27);
+		txtID.setBounds(152, 29, 120, 27);
 		contentPane.add(txtID);
 		txtID.setColumns(10);
 
 		txtName = new JTextField();
 		txtName.setColumns(10);
-		txtName.setBounds(137, 63, 237, 27);
+		txtName.setBounds(152, 111, 167, 27);
 		contentPane.add(txtName);
+		
+		txtDescription = new JTextField();
+		txtDescription.setColumns(10);
+		txtDescription.setBounds(619, 29, 250, 27);
+		contentPane.add(txtDescription);
 
-		txtEmail = new JTextField();
-		txtEmail.setColumns(10);
-		txtEmail.setBounds(137, 100, 237, 27);
-		contentPane.add(txtEmail);
+		ArrayList<NumberOfCredits> numberOfCredits = new ArrayList<NumberOfCredits>();
+		numberOfCredits.add(new NumberOfCredits(1, "1"));
+		numberOfCredits.add(new NumberOfCredits(2, "2"));
+		numberOfCredits.add(new NumberOfCredits(3, "3"));
+		cbbNumberOfCreditsModel = new DefaultComboBoxModel();
+		for(NumberOfCredits noc : numberOfCredits) {
+			cbbNumberOfCreditsModel.addElement(noc);
+		}
 
-		txtSDT = new JTextField();
-		txtSDT.setColumns(10);
-		txtSDT.setBounds(539, 29, 237, 27);
-		contentPane.add(txtSDT);
-
-		txtDiaChi = new JTextField();
-		txtDiaChi.setColumns(10);
-		txtDiaChi.setBounds(539, 65, 237, 27);
-		contentPane.add(txtDiaChi);
+		cbbNumberOfCredits = new JComboBox();
+		cbbNumberOfCredits.setModel(cbbNumberOfCreditsModel);
+		cbbNumberOfCredits.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		cbbNumberOfCredits.setBounds(619, 113, 137, 27);
+		cbbNumberOfCredits.setRenderer(new GenderRenderer());
+		contentPane.add(cbbNumberOfCredits);
 
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,7 +184,7 @@ public class FrmTeacher extends JInternalFrame {
 		btnCancel.setBounds(814, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		contentPane.add(btnCancel);
-		
+
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(flag == 0)
@@ -195,7 +204,7 @@ public class FrmTeacher extends JInternalFrame {
 		btnSave.setBounds(654, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnSave.setIcon(new ImageIcon("resources/save.jpg"));
 		contentPane.add(btnSave);
-		
+
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Del();
@@ -247,67 +256,55 @@ public class FrmTeacher extends JInternalFrame {
 				Find();
 			}
 		});
+
 		btnFind.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnFind.setBounds(10, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		contentPane.add(btnFind);
-
-		JLabel lblNewLabel_1_1_1 = new JLabel("AID");
-		lblNewLabel_1_1_1.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblNewLabel_1_1_1.setBounds(422, 93, 122, 38);
-		contentPane.add(lblNewLabel_1_1_1);
-
-		txtCID = new JTextField();
-		txtCID.setColumns(10);
-		txtCID.setBounds(539, 102, 237, 27);
-		contentPane.add(txtCID);
+		
 		load();
 	}
 	public static void load() {
 		txtID.setEnabled(true);
-		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
+		ArrayList<Course> lisCourse = new ArrayList<Course>();
 		try {
-			lisTeacher = Teacher.load(conn);
-		} catch (ClassNotFoundException | SQLException e) {
+			lisCourse = Course.load(conn);
+		} catch(ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
+		DefaultTableModel model = (DefaultTableModel)tabCourse.getModel();
 		if(model.getRowCount() > 0) {
 			model.setRowCount(0);
 		}
-		Object[] rows = new Object[6];
+		Object[] rows = new Object[4];
 		btnSave.setEnabled(false);
 		btnCancel.setEnabled(false);
-		for(int i=0; i <lisTeacher.size();i++ )
+		for(int i=0; i <lisCourse.size();i++ )
 		{    
-			rows[0]=(lisTeacher.get(i).getId()); 
-			rows[1]=(lisTeacher.get(i).getName()); 
-			rows[2]=(lisTeacher.get(i).getEmail()); 
-			rows[3]=(lisTeacher.get(i).getPhone()); 
-			rows[4]=(lisTeacher.get(i).getAddress()); 
-			rows[5]=(lisTeacher.get(i).getAid()); 
+			rows[0]=(lisCourse.get(i).getCid()); 
+			rows[1]=(lisCourse.get(i).getName()); 
+			rows[2]=(lisCourse.get(i).getDescription());
+			rows[3]=(lisCourse.get(i).getNumOfCredits());
 
 			model.addRow(rows); 
 		}
 	}
 	public static void Add() {
-		Teacher tc = new Teacher();
-		tc.setId(txtID.getText().toString());
-		tc.setName(txtName.getText().toString());
-		tc.setEmail(txtEmail.getText().toString());
-		tc.setPhone(txtSDT.getText().toString());
-		tc.setAddress(txtDiaChi.getText().toString());
-		tc.setAid(txtCID.getText().toString());
+		Course cs = new Course();
+		cs.setCid(txtID.getText().toString());
+		cs.setName(txtName.getText().toString());
+		cs.setDescription(txtDescription.getText().toString());
+		cs.setNumOfCredits(((NumberOfCredits)cbbNumberOfCredits.getSelectedItem()).getType());
 		try {
-			if(Teacher.Insert(tc, conn) == 1) {
-				JOptionPane.showMessageDialog(tabTeacher, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-				lisTeacher.add(tc);
-				DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
+			if(Course.Insert(cs, conn) == 1) {
+				JOptionPane.showMessageDialog(tabCourse, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				lisCourse.add(cs);
+				DefaultTableModel model = (DefaultTableModel)tabCourse.getModel();
 				model.setRowCount(0);
 				load();
 			}
 			else
-				JOptionPane.showMessageDialog(tabTeacher, "Thêm thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(tabCourse, "Thêm thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
@@ -315,40 +312,29 @@ public class FrmTeacher extends JInternalFrame {
 		}
 	}
 	public static void Edit() {
-		String[] teacher = new String[6];
-
-		teacher[0] =txtID.getText().toString();
-		teacher[1] =txtName.getText().toString();
-		teacher[2] =txtEmail.getText().toString();
-		teacher[3] =txtSDT.getText().toString();
-		teacher[4] =txtDiaChi.getText().toString();
-		teacher[5] =txtCID.getText().toString();
-		Teacher tc = new Teacher();
-		tc.setId(teacher[0]);
-		tc.setName(teacher[1]);
-		tc.setEmail(teacher[2]);
-		tc.setPhone(teacher[3]);
-		tc.setAddress(teacher[4]);
-		tc.setAid(teacher[5]);
+		Course cs = new Course();
+		cs.setCid(txtID.getText().toString());
+		cs.setName(txtName.getText().toString());
+		cs.setDescription(txtDescription.getText().toString());
+		cs.setNumOfCredits(((NumberOfCredits)cbbNumberOfCredits.getSelectedItem()).getType());
 		try {
-			if(Teacher.Edit(tc, conn) == 1) {
-				JOptionPane.showMessageDialog(tabTeacher, "Sửa Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-				for(int i=0; i< lisTeacher.size();i++){
-					if(lisTeacher.get(i).getId() == teacher[0]) {
-						lisTeacher.get(i).setName(teacher[1]);
-						lisTeacher.get(i).setEmail(teacher[2]);
-						lisTeacher.get(i).setPhone(teacher[3]);
-						lisTeacher.get(i).setAddress(teacher[4]);
-						lisTeacher.get(i).setAid(teacher[5]);
+			if(Course.Edit(cs, conn) == 1) {
+				JOptionPane.showMessageDialog(tabCourse, "Sửa Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				for(int i=0; i< lisCourse.size();i++){
+					if(lisCourse.get(i).getCid() == cs.getCid()) {
+						lisCourse.get(i).setName(cs.getName());
+						lisCourse.get(i).setDescription(cs.getDescription());
+						lisCourse.get(i).setNumOfCredits(cs.getNumOfCredits());
+						break;
 					}
 
 				}
-				DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
+				DefaultTableModel model = (DefaultTableModel)tabCourse.getModel();
 				model.setRowCount(0);
 				load();	
 			}
 			else
-				JOptionPane.showMessageDialog(tabTeacher, "Sửa thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(tabCourse, "Sửa thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 
 
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -357,20 +343,20 @@ public class FrmTeacher extends JInternalFrame {
 		}
 
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	public static void Del() {
 		String index=txtID.getText().toString();
-
 		try {
-			if(Teacher.Del(index, conn)==1)
+			if(Course.Del(index, conn)==1)
 			{
-				lisTeacher.remove(index);
-				JOptionPane.showMessageDialog( tabTeacher, "Xoa thanh cong!",  "Thong Bao", JOptionPane.INFORMATION_MESSAGE);
-				DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
+				lisCourse.remove(index);
+				JOptionPane.showMessageDialog( tabCourse, "Xoa thanh cong!",  "Thong Bao", JOptionPane.INFORMATION_MESSAGE);
+				DefaultTableModel model = (DefaultTableModel)tabCourse.getModel();
 				model.setRowCount(0);
 				load();
 			}
 			else
-				JOptionPane.showMessageDialog( tabTeacher, "Xay ra loi",  "Thong Bao", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog( tabCourse, "Xay ra loi",  "Thong Bao", JOptionPane.INFORMATION_MESSAGE);
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -378,35 +364,33 @@ public class FrmTeacher extends JInternalFrame {
 
 	}
 	public static void Find() {
-		ArrayList<Teacher> lisTeacher = new ArrayList<Teacher>();
+		ArrayList<Course> lisCourse = new ArrayList<Course>();
 		try {
-			lisTeacher = Teacher.load(conn);
-		} catch (ClassNotFoundException | SQLException e) {
+			lisCourse = Course.load(conn);
+		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		DefaultTableModel model = (DefaultTableModel)tabTeacher.getModel();
-		Object[] rows = new Object[6]; 
-		String index = txtID.getText().toString();
-		Teacher tc;
+		DefaultTableModel model = (DefaultTableModel)tabCourse.getModel();
+		Object[] rows = new Object[4]; 
+		String index = txtID.getText();
+		System.out.print(1);
 		try {
-			tc = Teacher.findTeacher(index, conn);
-			if(tc != null) {
+			Course cs = Course.findCourse(index, conn);
+			if(cs != null) {
 				model.setRowCount(0);
-				rows[0]=tc.getId(); 
-				rows[1]=tc.getName(); 
-				rows[2]=tc.getEmail(); 
-				rows[3]=tc.getPhone();
-				rows[4]=tc.getAddress(); 
-				rows[5]=tc.getAid(); 
+				rows[0]=cs.getCid(); 
+				rows[1]=cs.getName(); 
+				rows[2]=cs.getDescription();
+				rows[3]=cs.getNumOfCredits();
 
 				model.addRow(rows); 
 			}
 			else {
-				JOptionPane.showConfirmDialog(tabTeacher, "Không Tìm Thấy!!","Thông Báo",JOptionPane.OK_OPTION);
+				JOptionPane.showConfirmDialog(tabCourse, "Không Tìm Thấy!!","Thông Báo",JOptionPane.OK_OPTION);
 
 			}
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (NumberFormatException | HeadlessException | ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -414,9 +398,44 @@ public class FrmTeacher extends JInternalFrame {
 	public static void clear() {
 		txtID.setText("");
 		txtName.setText("");
-		txtEmail.setText("");
-		txtSDT.setText("");
-		txtDiaChi.setText("");
-		txtCID.setText("");
+		txtDescription.setText("");
+		cbbNumberOfCredits.setSelectedIndex(-1);
+	}
+	class NumberOfCredits{
+		private int type;
+		private String name;
+		public NumberOfCredits(int type, String name) {
+			this.type = type;
+			this.name = name;
+		}
+		public int getType() {
+			return type;
+		}
+		public void setType(int type) {
+			this.type = type;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+	class GenderRenderer extends BasicComboBoxRenderer
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if(value instanceof NumberOfCredits){
+				NumberOfCredits val = (NumberOfCredits) value;
+				setText(val.getName());
+			}
+			return this;
+		}
 	}
 }

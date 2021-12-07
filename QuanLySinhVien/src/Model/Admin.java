@@ -18,7 +18,7 @@ public class Admin extends Person{
 		super.setAddress(x.getAddress());
 		super.setAid(x.getAid());
 	}
-	public static ArrayList<Admin> load(Connection connection) {
+	public static ArrayList<Admin> load(Connection connection) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		ArrayList<Admin> listAdmins = new ArrayList<Admin>();
 		Admin ad =new Admin();
@@ -114,7 +114,7 @@ public class Admin extends Person{
 		return rs;
 	}
 	
-	public static Admin findAdmin(String id,Connection conn) {
+	public static Admin findAdmin(String id,Connection conn) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		Admin ad =new Admin();
 		try {

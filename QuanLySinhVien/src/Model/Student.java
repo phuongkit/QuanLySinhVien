@@ -144,7 +144,7 @@ public class Student extends Person{
 		return rs;
 	}
 
-	public static Student findStudent(String id,Connection conn) {
+	public static Student findStudent(String id,Connection conn) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		Student sd =new Student();
 		try {

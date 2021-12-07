@@ -274,6 +274,7 @@ public class FrmStudent extends JInternalFrame {
 				btnSave.setEnabled(false);
 				btnDelete.setEnabled(true);
 				txtID.setEnabled(true);
+				load();
 			}
 		});
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
@@ -348,6 +349,7 @@ public class FrmStudent extends JInternalFrame {
 		btnFind.setIcon(new ImageIcon("resources/find.png"));
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnCancel.setEnabled(true);
 				Find();
 			}
 		});
@@ -508,23 +510,30 @@ public class FrmStudent extends JInternalFrame {
 		DefaultTableModel model = (DefaultTableModel)tabStudent.getModel();
 		Object[] rows = new Object[9]; 
 		String index = txtID.getText().toString();
-		if(Student.findStudent(index, conn) != null) {
-			model.setRowCount(0);
-			rows[0]=(lisStudent.get(Integer.valueOf(index)-1).getId()); 
-			rows[1]=(lisStudent.get(Integer.valueOf(index)-1).getName()); 
-			rows[2]=(lisStudent.get(Integer.valueOf(index)-1).isGender());
-			rows[3]=(lisStudent.get(Integer.valueOf(index)-1).getDateOfBirth());
-			rows[4]=(lisStudent.get(Integer.valueOf(index)-1).getEmail()); 
-			rows[5]=(lisStudent.get(Integer.valueOf(index)-1).getPhone());
-			rows[6]=(lisStudent.get(Integer.valueOf(index)-1).getAddress()); 
-			rows[7]=(lisStudent.get(Integer.valueOf(index)-1).getAid()); 
-			rows[8]=(lisStudent.get(Integer.valueOf(index)-1).getFid());
+		Student sd;
+		try {
+			sd = Student.findStudent(index, conn);
+			if(sd != null) {
+				model.setRowCount(0);
+				rows[0]=sd.getId(); 
+				rows[1]=sd.getName(); 
+				rows[2]=sd.isGender();
+				rows[3]=sd.getDateOfBirth();
+				rows[4]=sd.getEmail(); 
+				rows[5]=sd.getPhone();
+				rows[6]=sd.getAddress(); 
+				rows[7]=sd.getAid(); 
+				rows[8]=sd.getFid();
 
-			model.addRow(rows); 
-		}
-		else {
-			JOptionPane.showConfirmDialog(tabStudent, "Không Tìm Thấy!!","Thông Báo",JOptionPane.OK_OPTION);
+				model.addRow(rows); 
+			}
+			else {
+				JOptionPane.showConfirmDialog(tabStudent, "Không Tìm Thấy!!","Thông Báo",JOptionPane.OK_OPTION);
 
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	public static void clear() {

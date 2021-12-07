@@ -1,6 +1,7 @@
 package GUI.Admin;
 
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -149,24 +150,29 @@ public class FrmChangePassword extends JDialog{
 						try {
 							String oldPassword = String.valueOf(pwfOldPassword.getPassword());
 							String newPassword = String.valueOf(pwfNewPassword.getPassword());
-							if(Account.checkLogin(userName, oldPassword, 0, conn)) {
-								try {
-									int success = Account.UpdatePassWord(userName, newPassword, conn);
-									if(success == 0) {
-										JOptionPane.showMessageDialog(contentPane,"Cập nhật không thành công! Vui lòng thử lại" , "Thông báo", JOptionPane.OK_CANCEL_OPTION);
+							try {
+								if(Account.checkLogin(userName, oldPassword, 0, conn)) {
+									try {
+										int success = Account.UpdatePassWord(userName, newPassword, conn);
+										if(success == 0) {
+											JOptionPane.showMessageDialog(contentPane,"Cập nhật không thành công! Vui lòng thử lại" , "Thông báo", JOptionPane.OK_CANCEL_OPTION);
+										}
+										else {
+											JOptionPane.showMessageDialog(contentPane,"Cập nhật mật khẩu thành công", "Thông báo", JOptionPane.OK_CANCEL_OPTION);
+											frmLG.setVisible(true);
+											frmMHC.setVisible(false);
+											frmMHC.dispose();
+											setVisible(false);
+											dispose();
+										}
+									} catch (ClassNotFoundException | SQLException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
 									}
-									else {
-										JOptionPane.showMessageDialog(contentPane,"Cập nhật mật khẩu thành công", "Thông báo", JOptionPane.OK_CANCEL_OPTION);
-										frmLG.setVisible(true);
-										frmMHC.setVisible(false);
-										frmMHC.dispose();
-										setVisible(false);
-										dispose();
-									}
-								} catch (ClassNotFoundException | SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
 								}
+							} catch (HeadlessException | ClassNotFoundException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block

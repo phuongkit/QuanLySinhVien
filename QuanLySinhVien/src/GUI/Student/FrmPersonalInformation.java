@@ -355,7 +355,7 @@ public class FrmPersonalInformation  extends JInternalFrame{
 			txtPermission.setText("Giảng viên");
 			break;
 		}
-		txtDateCreate.setText(formatter.format(ac.getCreate_Date()));
+		txtDateCreate.setText(formatter.format(ac.getDateOfCreate()));
 	}
 	public static void Update() {
 		txtName.setEditable(true);;

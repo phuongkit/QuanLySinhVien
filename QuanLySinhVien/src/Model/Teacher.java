@@ -20,7 +20,7 @@ public class Teacher extends Person{
 		super.setAddress(x.getAddress());
 		super.setAid(x.getAid());
 	}
-	public static ArrayList<Teacher> load(Connection connection) {
+	public static ArrayList<Teacher> load(Connection connection) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		ArrayList<Teacher> listTeachers = new ArrayList<Teacher>();
 		Teacher tc =new Teacher();
@@ -113,7 +113,7 @@ public class Teacher extends Person{
 		return rs;
 	}
 	
-	public static Teacher findTeacher(String id,Connection conn) {
+	public static Teacher findTeacher(String id,Connection conn) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		Teacher tc =new Teacher();
 		try {

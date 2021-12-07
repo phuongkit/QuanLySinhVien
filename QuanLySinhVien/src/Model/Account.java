@@ -13,7 +13,7 @@ public class Account {
 	private String userName;
 	private String passWord;
 	private int permission;
-	private Date create_Date;
+	private Date dateOfCreate;
 	public Account() {
 		
 	}
@@ -22,7 +22,7 @@ public class Account {
 		this.userName = ac.userName;
 		this.passWord = ac.passWord;
 		this.permission = ac.permission;
-		this.create_Date = ac.create_Date;
+		this.dateOfCreate = ac.dateOfCreate;
 	}
 	public String getAid() {
 		return aid;
@@ -48,13 +48,13 @@ public class Account {
 	public void setPermission(int permission) {
 		this.permission = permission;
 	}
-	public Date getCreate_Date() {
-		return create_Date;
+	public Date getDateOfCreate() {
+		return dateOfCreate;
 	}
-	public void setCreate_Date(Date create_Date) {
-		this.create_Date = create_Date;
+	public void setDateOfCreate(Date dateOfCreate) {
+		this.dateOfCreate = dateOfCreate;
 	}
-	public static boolean checkLogin(String userName, String passWord, int permission, Connection conn) throws SQLException{
+	public static boolean checkLogin(String userName, String passWord, int permission, Connection conn) throws ClassNotFoundException, SQLException{
 		String sql = "select * from Account where username = ? and password = ? and permission = ?";
 		PreparedStatement pstm = conn.prepareStatement(sql);
 		pstm.setString(1, userName);
@@ -80,7 +80,7 @@ public class Account {
 				ac.setUserName(resultSet.getString(2));
 				ac.setPassWord(resultSet.getString(3));
 				ac.setPermission(resultSet.getInt(4));
-				ac.setCreate_Date(resultSet.getDate(5));
+				ac.setDateOfCreate(resultSet.getDate(5));
 
 				listAccounts.add(new Account(ac));
 			}
@@ -102,7 +102,7 @@ public class Account {
 			ps.setString(2, ac.getUserName());
 			ps.setString(3, ac.getPassWord());
 			ps.setInt(4, ac.getPermission());
-			ps.setDate(5,  new java.sql.Date(ac.getCreate_Date().getTime()));
+			ps.setDate(5,  new java.sql.Date(ac.getDateOfCreate().getTime()));
 
 			rs = ps.executeUpdate();
 
@@ -117,12 +117,12 @@ public class Account {
 		int rs = 0;
 		try  
 		{
-			String query = "Update Account set USERNAME = ?, PASSWORD = ?, PERMISSION = ?, CREATE_DATE = ? where AID = ?";
+			String query = "Update Account set USERNAME = ?, PASSWORD = ?, PERMISSION = ?, DATEOFCREATE = ? where AID = ?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, ac.getUserName());
 			ps.setString(2, ac.getPassWord());
 			ps.setInt(3, ac.getPermission());
-			ps.setDate(4,  new java.sql.Date(ac.getCreate_Date().getTime()));
+			ps.setDate(4,  new java.sql.Date(ac.getDateOfCreate().getTime()));
 			ps.setString(5, ac.getAid());
 			rs = ps.executeUpdate();
 		}
@@ -183,7 +183,7 @@ public class Account {
 				ac.setUserName(resultSet.getString(2));
 				ac.setPassWord(resultSet.getString(3));
 				ac.setPermission(resultSet.getInt(4));
-				ac.setCreate_Date(resultSet.getDate(5));
+				ac.setDateOfCreate(resultSet.getDate(5));
 				return ac;
 			}
 		} catch (SQLException e) {
@@ -205,7 +205,7 @@ public class Account {
 				ac.setUserName(resultSet.getString(2));
 				ac.setPassWord(resultSet.getString(3));
 				ac.setPermission(resultSet.getInt(4));
-				ac.setCreate_Date(resultSet.getDate(5));
+				ac.setDateOfCreate(resultSet.getDate(5));
 				return ac;
 			}
 		} catch (SQLException e) {

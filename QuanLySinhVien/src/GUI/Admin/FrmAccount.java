@@ -198,6 +198,7 @@ public class FrmAccount extends JInternalFrame {
 				btnDelete.setEnabled(true);
 				txtAID.setEnabled(true);
 				txtUserName.setEnabled(true);
+				load();
 			}
 		});
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
@@ -273,6 +274,7 @@ public class FrmAccount extends JInternalFrame {
 		btnFind.setIcon(new ImageIcon("resources/find.png"));
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnCancel.setEnabled(true);
 				Find();
 			}
 		});
@@ -305,7 +307,7 @@ public class FrmAccount extends JInternalFrame {
 			rows[1]=(lisAccount.get(i).getUserName());
 			rows[2]=(lisAccount.get(i).getPassWord());
 			rows[3]=(lisAccount.get(i).getPermission());
-			rows[4]=(lisAccount.get(i).getCreate_Date());
+			rows[4]=(lisAccount.get(i).getDateOfCreate());
 
 			model.addRow(rows); 
 		}
@@ -316,7 +318,7 @@ public class FrmAccount extends JInternalFrame {
 		sd.setUserName(txtUserName.getText().toString());
 		sd.setPassWord(String.valueOf(pwfPassword.getPassword()));
 		sd.setPermission(((Permission)cbbPermission.getSelectedItem()).getType());
-		sd.setCreate_Date(dtDateofCreate.getDate());
+		sd.setDateOfCreate(dtDateofCreate.getDate());
 		try {
 			if(Account.Insert(sd, conn) == 1) {
 				JOptionPane.showMessageDialog(tabAccount, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
@@ -339,7 +341,7 @@ public class FrmAccount extends JInternalFrame {
 		ac.setUserName(txtUserName.getText().toString());
 		ac.setPassWord(String.valueOf(pwfPassword.getPassword()));
 		ac.setPermission(((Permission)cbbPermission.getSelectedItem()).getType());
-		ac.setCreate_Date(dtDateofCreate.getDate());
+		ac.setDateOfCreate(dtDateofCreate.getDate());
 		try {
 			if(Account.Edit(ac, conn) == 1) {
 				JOptionPane.showMessageDialog(tabAccount, "Sửa Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
@@ -347,7 +349,7 @@ public class FrmAccount extends JInternalFrame {
 					if(lisAccount.get(i).getAid() == ac.getAid()) {
 						lisAccount.get(i).setPassWord(ac.getPassWord());
 						lisAccount.get(i).setPermission(ac.getPermission());
-						lisAccount.get(i).setCreate_Date(ac.getCreate_Date());
+						lisAccount.get(i).setDateOfCreate(ac.getDateOfCreate());
 						break;
 					}
 				}
@@ -397,13 +399,14 @@ public class FrmAccount extends JInternalFrame {
 		Object[] rows = new Object[9]; 
 		String index = txtAID.getText().toString();
 		try {
-			if(Account.findAccount(index, conn) != null) {
+			Account ac = Account.findAccount(index, conn);
+			if(ac != null) {
 				model.setRowCount(0);
-				rows[0]=(lisAccount.get(Integer.valueOf(index)-1).getAid()); 
-				rows[1]=(lisAccount.get(Integer.valueOf(index)-1).getUserName()); 
-				rows[2]=(lisAccount.get(Integer.valueOf(index)-1).getPassWord());
-				rows[3]=(lisAccount.get(Integer.valueOf(index)-1).getPermission());
-				rows[4]=(lisAccount.get(Integer.valueOf(index)-1).getCreate_Date()); 
+				rows[0]=ac.getAid(); 
+				rows[1]=ac.getUserName(); 
+				rows[2]=ac.getPassWord();
+				rows[3]=ac.getPermission();
+				rows[4]=ac.getDateOfCreate(); 
 
 				model.addRow(rows); 
 			}

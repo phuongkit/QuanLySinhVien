@@ -47,6 +47,7 @@ public class FrmManHinhChinh extends JFrame{
 	private static FrmAccount frmAC;
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
+	private static FrmCourse frmCS;
 
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
 		this.frmLG = frmLG;
@@ -170,6 +171,16 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLLop = new JMenuItem("Quản Lý Lớp");
 		mnItemQLLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmCS == null || frmCS.isClosed()) {
+					frmCS = new FrmCourse(conn);
+					desktopPane.add(frmCS);
+					frmCS.setVisible(true);
+				}
+				frmCS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmCS.setResizable(false);
 			}
 		});
 		mnQuanLy.add(mnItemQLLop);
@@ -177,7 +188,7 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLChiTietLop = new JMenuItem("Quản Lý Lớp Học");
 		mnItemQLChiTietLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				
 			}
 		});
 		mnQuanLy.add(mnItemQLChiTietLop);

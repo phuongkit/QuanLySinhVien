@@ -272,7 +272,7 @@ public class FrmPersonalInformation  extends JInternalFrame{
 			break;
 		}
 		formatter = new SimpleDateFormat("dd/MM/yyyy");  
-		txtDateCreate.setText(formatter.format(ac.getCreate_Date()));
+		txtDateCreate.setText(formatter.format(ac.getDateOfCreate()));
 	}
 	public static void Update() {
 		txtName.setEditable(true);;
