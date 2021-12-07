@@ -48,6 +48,7 @@ public class FrmManHinhChinh extends JFrame{
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
 	private static FrmCourse frmCS;
+	private static FrmCourse_Class frmCSS;
 
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
 		this.frmLG = frmLG;
@@ -188,7 +189,16 @@ public class FrmManHinhChinh extends JFrame{
 		mnItemQLChiTietLop = new JMenuItem("Quản Lý Lớp Học");
 		mnItemQLChiTietLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmCSS == null || frmCSS.isClosed()) {
+					frmCSS = new FrmCourse_Class(conn);
+					desktopPane.add(frmCSS);
+					frmCSS.setVisible(true);
+				}
+				frmCSS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmCSS.setResizable(false);
 			}
 		});
 		mnQuanLy.add(mnItemQLChiTietLop);
