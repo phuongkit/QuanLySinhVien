@@ -194,4 +194,21 @@ public class Student extends Person{
 		}
 		return null;
 	}
+	public static String getSIDofUserName(String userName, Connection conn) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		String SID = "";
+		try {
+			String query = "select s.SID from Student s inner join Account a ON s.AID = a.AID where a.USERNAME = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, userName);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				SID = resultSet.getString(1);
+				return SID;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return SID;
+	}
 }

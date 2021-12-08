@@ -1,4 +1,4 @@
-package GUI.Student;
+package GUI.Teacher;
 
 import java.awt.Component;
 import java.awt.Font;

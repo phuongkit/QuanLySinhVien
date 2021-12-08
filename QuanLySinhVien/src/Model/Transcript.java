@@ -12,7 +12,7 @@ public class Transcript {
 	private float score;
 	private int semester;
 	public Transcript() {
-		
+		this.score = -1;
 	}
 	public Transcript(Transcript x) {
 		this.ccid = x.ccid;
@@ -197,5 +197,21 @@ public class Transcript {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public static boolean existsCourseStudent(String cid, String sid, Connection conn) throws ClassNotFoundException, SQLException {
+		boolean found = false;
+		try {
+			String query = "select * from Transcript ts inner join Course_Class cc on ts.CCID = cc.CCID where cc.CID = ? and ts.sid = ? and status = 1"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, cid);
+			ps.setString(2, sid);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				found = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return found;
 	}
 }

@@ -222,6 +222,7 @@ public class FrmManHinhChinh extends JFrame{
 	}
 	public void Load() {
 		for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+			frmChild=null;
 			frmChild.dispose();
 		}
 		if(frmTTCN == null || frmTTCN.isClosed()) {

@@ -231,7 +231,7 @@ public class Course_Class {
 		}
 		return ccid;
 	}
-	public static String getNameCourseClass(Course_Class css,Connection conn) throws ClassNotFoundException, SQLException {
+	public static String getNameCourseClass(Course_Class css, Connection conn) throws ClassNotFoundException, SQLException {
 		String name = "";
 		try {
 			String query = "select NAME from Course where CID = ?"; 
