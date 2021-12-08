@@ -231,4 +231,23 @@ public class Course_Class {
 		}
 		return ccid;
 	}
+	public static String getNameCourseClass(Course_Class css,Connection conn) throws ClassNotFoundException, SQLException {
+		String name = "";
+		try {
+			String query = "select NAME from Course where CID = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, css.getCid());
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				name = resultSet.getString(1);
+				int index = css.getCcid().lastIndexOf("_");
+				if(index != -1) {
+					name = name + " Lớp " + css.getCcid().substring(index+1);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
 }

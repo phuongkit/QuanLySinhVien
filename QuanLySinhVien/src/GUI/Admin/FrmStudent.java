@@ -278,7 +278,7 @@ public class FrmStudent extends JInternalFrame {
 			}
 		});
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnCancel.setBounds(814, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCancel.setBounds(818, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		contentPane.add(btnCancel);
 		
@@ -298,7 +298,7 @@ public class FrmStudent extends JInternalFrame {
 			}
 		});
 		btnSave.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnSave.setBounds(654, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnSave.setBounds(658, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnSave.setIcon(new ImageIcon("resources/save.jpg"));
 		contentPane.add(btnSave);
 		
@@ -308,7 +308,7 @@ public class FrmStudent extends JInternalFrame {
 			}
 		});
 		btnDelete.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnDelete.setBounds(493, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnDelete.setBounds(492, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnDelete.setIcon(new ImageIcon("resources/delete.png"));
 		contentPane.add(btnDelete);
 
@@ -325,7 +325,7 @@ public class FrmStudent extends JInternalFrame {
 			}
 		});
 		btnEdit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnEdit.setBounds(332, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnEdit.setBounds(337, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnEdit.setIcon(new ImageIcon("resources/edit.png"));
 		contentPane.add(btnEdit);
 
@@ -342,7 +342,7 @@ public class FrmStudent extends JInternalFrame {
 			}
 		});
 		btnCreate.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnCreate.setBounds(171, 461, BUTTON_WIDTH, BUTTON_HEIGHT);
+		btnCreate.setBounds(184, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnCreate.setIcon(new ImageIcon("resources/create.png"));
 		contentPane.add(btnCreate);
 
@@ -357,7 +357,7 @@ public class FrmStudent extends JInternalFrame {
 		btnFind.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnFind.setBounds(10, 462, BUTTON_WIDTH, BUTTON_HEIGHT);
 		contentPane.add(btnFind);
-
+		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Tài Khoản");
 		lblNewLabel_1_1_1.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblNewLabel_1_1_1.setBounds(678, 56, 122, 38);
@@ -377,6 +377,7 @@ public class FrmStudent extends JInternalFrame {
 		lblNewLabel_1_1_1_1.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblNewLabel_1_1_1_1.setBounds(678, 104, 122, 38);
 		contentPane.add(lblNewLabel_1_1_1_1);
+		
 		load();
 	}
 	public static void load() {

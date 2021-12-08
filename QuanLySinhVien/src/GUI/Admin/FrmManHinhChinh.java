@@ -31,12 +31,11 @@ public class FrmManHinhChinh extends JFrame{
 	private JMenuItem mnItemTaiKhoan;
 	private JMenuItem mnItemDoiMatKhau;
 	private JMenuItem mnItemThoat;
-	private JMenu mnDanhMuc;
-	private JMenuItem mnItemLopHoc;
 	private JMenu mnQuanLy;
 	private JMenuItem mnItemQLTaiKhoan;
 	private JMenuItem mnItemQLGiangVien;
 	private JMenuItem mnItemQLSinhVien;
+	private JMenuItem mnItemQLBangDiem;
 	private JMenuItem mnItemQLLop;
 	private JMenuItem mnItemQLChiTietLop;
 	private static JDesktopPane desktopPane;
@@ -47,6 +46,7 @@ public class FrmManHinhChinh extends JFrame{
 	private static FrmAccount frmAC;
 	private static FrmTeacher frmGV;
 	private static FrmStudent frmSV;
+	private static FrmTranscript frmTS;
 	private static FrmCourse frmCS;
 	private static FrmCourse_Class frmCSS;
 
@@ -104,17 +104,7 @@ public class FrmManHinhChinh extends JFrame{
 			}
 		});
 		mnTaiKhoan.add(mnItemThoat);
-
-		mnDanhMuc = new JMenu("Danh Mục");
-		menuBar.add(mnDanhMuc);
-
-		mnItemLopHoc = new JMenuItem("Lớp Học");
-		mnItemLopHoc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		mnDanhMuc.add(mnItemLopHoc);
-
+		
 		mnQuanLy = new JMenu("Quản Lý");
 		menuBar.add(mnQuanLy);
 
@@ -169,7 +159,24 @@ public class FrmManHinhChinh extends JFrame{
 		});
 		mnQuanLy.add(mnItemQLSinhVien);
 
-		mnItemQLLop = new JMenuItem("Quản Lý Lớp");
+		mnItemQLBangDiem = new JMenuItem("Quản Lý Bảng Điểm");
+		mnItemQLBangDiem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmTS == null || frmTS.isClosed()) {
+					frmTS = new FrmTranscript(conn);
+					desktopPane.add(frmTS);
+					frmTS.setVisible(true);
+				}
+				frmTS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmTS.setResizable(false);
+			}
+		});
+		mnQuanLy.add(mnItemQLBangDiem);
+		
+		mnItemQLLop = new JMenuItem("Quản Lý Học Phần");
 		mnItemQLLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
@@ -186,7 +193,7 @@ public class FrmManHinhChinh extends JFrame{
 		});
 		mnQuanLy.add(mnItemQLLop);
 
-		mnItemQLChiTietLop = new JMenuItem("Quản Lý Lớp Học");
+		mnItemQLChiTietLop = new JMenuItem("Quản Lý Học Phần Con");
 		mnItemQLChiTietLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
