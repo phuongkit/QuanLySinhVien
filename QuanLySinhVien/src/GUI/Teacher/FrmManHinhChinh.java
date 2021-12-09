@@ -36,6 +36,7 @@ public class FrmManHinhChinh  extends JFrame{
 	private static JMenuItem mnItemDanhSachHocPhan;
 	private static JMenuItem mnItemDangKyHocPhan;
 	private static JMenuItem mnItemTraCuuHocPhan;
+	private static JMenuItem mnItemDanhSachLopHocPhanGiangDay;
 	private static JMenuItem mnItemBangDiem;
 	private static JDesktopPane desktopPane;
 
@@ -45,6 +46,7 @@ public class FrmManHinhChinh  extends JFrame{
 	private static FrmCourseList frmCL;
 	private static FrmCourseRegister frmCR;
 	private static FrmCourseSearch frmCS;
+	private static FrmTeachCourse_ClassList frmTCSS;
 	private static FrmTranscript frmTS;
 
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
@@ -119,19 +121,19 @@ public class FrmManHinhChinh  extends JFrame{
 		});
 		mnDanhMuc.add(mnItemDanhSachHocPhan);
 
-		mnItemDangKyHocPhan = new JMenuItem("Đăng Ký Học Phần");
+		mnItemDangKyHocPhan = new JMenuItem("Đăng Ký Học Phần Giảng Dạy");
 		mnItemDangKyHocPhan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
-//					frmChild.dispose();
-//				}
-//				if(frmCR == null || frmCR.isClosed()) {
-//					frmCR = new FrmCourseRegister(userName, conn);
-//					desktopPane.add(frmCR);
-//				}
-//				frmCR.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
-//				frmCR.setResizable(false);
-//				frmCR.setVisible(true);
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmCR == null || frmCR.isClosed()) {
+					frmCR = new FrmCourseRegister(userName, conn);
+					desktopPane.add(frmCR);
+				}
+				frmCR.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmCR.setResizable(false);
+				frmCR.setVisible(true);
 			}
 		});
 		mnDanhMuc.add(mnItemDangKyHocPhan);
@@ -153,20 +155,36 @@ public class FrmManHinhChinh  extends JFrame{
 		});
 		mnDanhMuc.add(mnItemTraCuuHocPhan);
 		
+		mnItemDanhSachLopHocPhanGiangDay = new JMenuItem("Danh sách học phần đang giảng dạy");
+		mnItemDanhSachLopHocPhanGiangDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmTCSS == null || frmTCSS.isClosed()) {
+					frmTCSS = new FrmTeachCourse_ClassList(userName, conn);
+					desktopPane.add(frmTCSS);
+				}
+				frmTCSS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmTCSS.setResizable(false);
+				frmTCSS.setVisible(true);
+			}
+		});
+		mnDanhMuc.add(mnItemDanhSachLopHocPhanGiangDay);
 		
-		mnItemBangDiem = new JMenuItem("Bảng Điểm");
+		mnItemBangDiem = new JMenuItem("Nhập Điểm");
 		mnItemBangDiem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
-//					frmChild.dispose();
-//				}
-//				if(frmTS == null || frmCS.isClosed()) {
-//					frmTS = new FrmTranscript(userName, conn);
-//					desktopPane.add(frmTS);
-//				}
-//				frmTS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
-//				frmTS.setResizable(false);
-//				frmTS.setVisible(true);
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmTS == null || frmCS.isClosed()) {
+					frmTS = new FrmTranscript(userName, conn);
+					desktopPane.add(frmTS);
+				}
+				frmTS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmTS.setResizable(false);
+				frmTS.setVisible(true);
 			}
 		});
 		mnDanhMuc.add(mnItemBangDiem);
@@ -188,6 +206,7 @@ public class FrmManHinhChinh  extends JFrame{
 		frmCL = null;
 		frmCR = null;
 		frmCS = null;
+		frmTCSS = null;
 		frmTS = null;
 		for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
 			frmChild.dispose();

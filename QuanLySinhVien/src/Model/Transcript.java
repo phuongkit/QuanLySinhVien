@@ -10,7 +10,6 @@ public class Transcript {
 	private String ccid;
 	private String sid;
 	private float score;
-	private int semester;
 	public Transcript() {
 		this.score = -1;
 	}
@@ -18,7 +17,6 @@ public class Transcript {
 		this.ccid = x.ccid;
 		this.sid = x.sid;
 		this.score = x.score;
-		this.semester = x.semester;
 	}
 	public String getCcid() {
 		return ccid;
@@ -38,12 +36,6 @@ public class Transcript {
 	public void setScore(float score) {
 		this.score = score;
 	}
-	public int getSemester() {
-		return semester;
-	}
-	public void setSemester(int semester) {
-		this.semester = semester;
-	}
 	public static ArrayList<Transcript> load(Connection connection) throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
 		ArrayList<Transcript> listTranscripts = new ArrayList<Transcript>();
@@ -56,7 +48,6 @@ public class Transcript {
 				tr.setCcid(resultSet.getString(1));
 				tr.setSid(resultSet.getString(2));
 				tr.setScore(resultSet.getFloat(3));
-				tr.setSemester(resultSet.getInt(4));
 
 				listTranscripts.add(new Transcript(tr));
 			}
@@ -70,14 +61,13 @@ public class Transcript {
 		int rs = 0;
 		try  
 		{
-			String query = "Insert into Transcript values ( ? , ? , ? , ?);";
+			String query = "Insert into Transcript values ( ? , ? , ?);";
 
 			PreparedStatement ps = conn.prepareStatement(query);
 
 			ps.setString(1, tr.getCcid());
 			ps.setString(2, tr.getSid());
 			ps.setFloat(3, tr.getScore());
-			ps.setInt(4, tr.getSemester());
 
 			rs = ps.executeUpdate();
 
@@ -92,12 +82,11 @@ public class Transcript {
 		int rs = 0;
 		try  
 		{
-			String query = "Update Transcript set SCORE = ?, SEMESTER = ? where CCID = ? and SID = ?";
+			String query = "Update Transcript set SCORE = ? where CCID = ? and SID = ?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setFloat(1, tr.getScore());
-			ps.setInt(2, tr.getSemester());
-			ps.setString(3, tr.getCcid());
-			ps.setString(4, tr.getSid());
+			ps.setString(2, tr.getCcid());
+			ps.setString(3, tr.getSid());
 			
 			rs = ps.executeUpdate();
 
@@ -143,7 +132,6 @@ public class Transcript {
 				tr.setCcid(resultSet.getString(1));
 				tr.setSid(resultSet.getString(2));
 				tr.setScore(resultSet.getFloat(3));
-				tr.setScore(resultSet.getInt(4));
 				
 				return tr;
 			}
@@ -165,7 +153,6 @@ public class Transcript {
 				tr.setCcid(resultSet.getString(1));
 				tr.setSid(resultSet.getString(2));
 				tr.setScore(resultSet.getFloat(3));
-				tr.setSemester(resultSet.getInt(4));
 				
 				listTranscripts.add(new Transcript(tr));
 			}
@@ -188,7 +175,34 @@ public class Transcript {
 				tr.setCcid(resultSet.getString(1));
 				tr.setSid(resultSet.getString(2));
 				tr.setScore(resultSet.getFloat(3));
-				tr.setSemester(resultSet.getInt(4));
+				
+				listTranscripts.add(new Transcript(tr));
+			}
+			return listTranscripts;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static ArrayList<Transcript> findTranscriptOfTID(String tid, String ccid, Connection conn) throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		ArrayList<Transcript> listTranscripts = new ArrayList<Transcript>();
+		Transcript tr = new Transcript();
+		try {
+			String query = "select t.CCID, t.SID, t.SCORE from Transcript t inner join Course_Class cc on t.CCID = cc.CCID where cc.TID = ? and cc.STATUS = 0 "; 
+			if(!ccid.equals("")) {
+				query = query + " and cc.CCID = ?";
+			}
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1,tid);
+			if(!ccid.equals("")) {
+				ps.setString(2, ccid);
+			}
+			ResultSet resultSet = ps.executeQuery();
+			while (resultSet.next()) {
+				tr.setCcid(resultSet.getString(1));
+				tr.setSid(resultSet.getString(2));
+				tr.setScore(resultSet.getFloat(3));
 				
 				listTranscripts.add(new Transcript(tr));
 			}

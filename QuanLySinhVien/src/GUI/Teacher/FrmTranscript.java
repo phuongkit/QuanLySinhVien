@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,9 +29,14 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import GUI.InitGUI;
+import Model.Course;
+import Model.Course_Class;
 import Model.InfoCourse_Class;
+import Model.Room;
 import Model.Student;
+import Model.Teacher;
 import Model.Transcript;
+import javax.swing.SwingConstants;
 
 public class FrmTranscript extends JInternalFrame {
 
@@ -39,7 +46,8 @@ public class FrmTranscript extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private static Connection conn = null;
-	private static String sid;
+	private static String tid;
+	private static String ccid;
 
 	private String FONT_TYPE;
 	private int FONT;
@@ -49,15 +57,20 @@ public class FrmTranscript extends JInternalFrame {
 	private int SCREEN_HEIGHT;
 	private int SCREEN_WIDTH;
 
-	private static JComboBox cbbSemester;
-	private static DefaultComboBoxModel cbbSemesterModel;
+	private static JTextField txtStudent = new JTextField();
+	private static JTextField txtScore = new JTextField();
+	private static JComboBox cbbCourse_Class = new JComboBox();
+	private static DefaultComboBoxModel cbbCourse_ClassModel;
 	private static JTextField txtSearch;
 	private static ArrayList<Transcript> lisInfoCourse_Class = new ArrayList<Transcript>();
-	private static String[] columnName = {"Mã Môn Học", "Mã Lớp Học Phần", "Tên Học Phần", "Phòng", "Giảng Viên", "Học Kỳ", "Mô Tả Lớp", "Số Tín Chỉ", "Mô Tả Môn Học", "Điểm"};
+	private static String[] columnName = {"Mã Lớp Học Phần", "Sinh Viên", "Điểm"};
 	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
 	private static JTable tabTranscript = new JTable(model) ;
 	private static JButton btnReLoad = new JButton("ReLoad");
-	private static JButton btnFilter = new JButton("Lọc");
+	private static JButton btnEdit = new JButton("Sửa");
+	private static JButton btnSave = new JButton("Lưu");
+	private static JButton btnCancel = new JButton("Hủy");
+	private static JButton btnFind = new JButton("Tìm theo lớp học phần");
 	private static int semester;
 
 	public void Init() {
@@ -74,11 +87,12 @@ public class FrmTranscript extends JInternalFrame {
 	public FrmTranscript(String userName, Connection conn) {
 		((javax.swing.plaf.basic.BasicInternalFrameUI)this.getUI()).setNorthPane(null);
 		try {
-			this.sid = Student.getSIDofUserName(userName, conn);
+			this.tid = Teacher.getTIDofUserName(userName, conn);
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		this.ccid = "";
 		this.semester = -1;
 		this.conn = conn;
 		Init();
@@ -92,67 +106,148 @@ public class FrmTranscript extends JInternalFrame {
 
 		tabTranscript.setBounds(10, 168, 870, 305);
 
+		tabTranscript.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = tabTranscript.getSelectedRow();
+				if(row != -1) {
+					String ccid = tabTranscript.getValueAt(row, 0).toString();
+					int index = -1;
+					for(int i=0;i<cbbCourse_ClassModel.getSize();i++) {
+						Course_Class css =(Course_Class)cbbCourse_ClassModel.getElementAt(i);
+						if(css.getCcid().equals(ccid)) {
+							index=i;
+							break;
+						}
+					}
+					cbbCourse_Class.setSelectedIndex(index);
+					String sid = tabTranscript.getValueAt(row, 1).toString();
+					Student sd;
+					try {
+						sd = Student.findStudent(sid, conn);
+						txtStudent.setText(sd.getName());
+					} catch (ClassNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					txtScore.setText(tabTranscript.getValueAt(row, 2).toString());
+				}
+			}
+
+		});
 		JScrollPane scrollPane = new JScrollPane(tabTranscript);
-		scrollPane.setBounds(0, 77, 948, 363);
+		scrollPane.setBounds(10, 133, 938, 307);
 		contentPane.add(scrollPane);
 
-		JLabel lblSemster = new JLabel("Học Kỳ:");
-		lblSemster.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblSemster.setBounds(70, 15, 82, 20);
-		contentPane.add(lblSemster);
+		JLabel lblCourse_Class = new JLabel("Lớp Học Phần");
+		lblCourse_Class.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		lblCourse_Class.setBounds(10, 15, 107, 20);
+		contentPane.add(lblCourse_Class);
 
-		ArrayList<Semester> semesters = new ArrayList<Semester>();
-		semesters.add(new Semester(-1, "Tất cả"));
-		semesters.add(new Semester(1, "Học Kỳ I"));
-		semesters.add(new Semester(2, "Học Kỳ II"));
-		semesters.add(new Semester(3, "Học Kỳ III"));
-		semesters.add(new Semester(4, "Học Kỳ IV"));
-		semesters.add(new Semester(5, "Học Kỳ V"));
-		semesters.add(new Semester(6, "Học Kỳ VI"));
-		semesters.add(new Semester(7, "Học Kỳ VII"));
-		semesters.add(new Semester(8, "Học Kỳ VIII"));
-		cbbSemesterModel = new DefaultComboBoxModel();
-		for(Semester smt : semesters) {
-			cbbSemesterModel.addElement(smt);
+		ArrayList<Course_Class> course_Classs = new ArrayList<Course_Class>();
+		try {
+			course_Classs = Course_Class.load(conn);
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		cbbCourse_ClassModel = new DefaultComboBoxModel();
+		for(Course_Class css : course_Classs) {
+			cbbCourse_ClassModel.addElement(css);
 		}
 
-		cbbSemester = new JComboBox();
-		cbbSemester.setModel(cbbSemesterModel);
-		cbbSemester.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		cbbSemester.setBounds(162, 10, 196, 30);
-		cbbSemester.setRenderer(new SemesterRenderer());
-		cbbSemester.setSelectedIndex(0);
-		contentPane.add(cbbSemester);
-		
-		btnReLoad.addActionListener(new ActionListener() {
+		cbbCourse_Class.setModel(cbbCourse_ClassModel);
+		cbbCourse_Class.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		cbbCourse_Class.setBounds(121, 10, 292, 30);
+		cbbCourse_Class.setRenderer(new Course_ClassRenderer());
+		cbbCourse_Class.setSelectedIndex(0);
+		contentPane.add(cbbCourse_Class);
+
+		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				semester = -1;
-				cbbSemester.setSelectedIndex(0);
+				btnFind.setEnabled(false);
+				btnEdit.setEnabled(false);
+				btnSave.setEnabled(true);
+				btnCancel.setEnabled(true);
+				cbbCourse_Class.setEnabled(false);
+			}
+		});
+		btnEdit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		btnEdit.setBounds(257, 450, 107, 40);
+		contentPane.add(btnEdit);
+
+		btnSave.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		btnSave.setBounds(385, 450, 107, 40);
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ccid = "";
+				btnFind.setEnabled(true);
+				btnEdit.setEnabled(true);
+				cbbCourse_Class.setEnabled(true);
+				edit();
+			}
+		});
+		contentPane.add(btnSave);
+
+		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		btnCancel.setBounds(516, 450, 107, 40);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ccid = "";
+				btnFind.setEnabled(true);
+				btnEdit.setEnabled(true);
+				cbbCourse_Class.setEnabled(true);
 				load();
 			}
 		});
-		btnReLoad.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		btnReLoad.setBounds(788, 450, BUTTON_WIDTH + 30, BUTTON_HEIGHT);
-		btnReLoad.setIcon(new ImageIcon("resources/reload.png"));
-		contentPane.add(btnReLoad);
-		
-		btnFilter.addActionListener(new ActionListener() {
+		contentPane.add(btnCancel);
+
+		txtScore.setBounds(598, 45, 196, 33);
+		txtScore.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		contentPane.add(txtScore);
+		txtScore.setColumns(10);
+
+		JLabel lblStudent = new JLabel("Sinh Viên");
+		lblStudent.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		lblStudent.setBounds(10, 81, 107, 20);
+		contentPane.add(lblStudent);
+
+		JLabel lblScore = new JLabel("Điểm");
+		lblScore.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		lblScore.setBounds(485, 48, 107, 20);
+		contentPane.add(lblScore);
+
+		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				semester = ((Semester)cbbSemester.getSelectedItem()).getType();
-				load();
+				Course_Class css = (Course_Class)cbbCourse_Class.getSelectedItem();
+				if(css == null) {
+					JOptionPane.showMessageDialog(tabTranscript, "Vui chọn chọn lớp học phần cần tìm!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					ccid = css.getCcid();
+					load();
+					btnCancel.setEnabled(true);
+				}
 			}
 		});
-		btnFilter.setFont(new Font("Dialog", Font.PLAIN, 16));
-		btnFilter.setBounds(403, 5, 150, 40);
-		contentPane.add(btnFilter);
+		btnFind.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		btnFind.setBounds(20, 450, 209, 40);
+		contentPane.add(btnFind);
+
+		txtStudent.setColumns(10);
+		txtStudent.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
+		txtStudent.setBounds(121, 68, 292, 33);
+		txtStudent.setEnabled(false);
+		contentPane.add(txtStudent);
 
 		load();
 	}
 	public static void load() {
-		
-		ArrayList<InfoCourse_Class> lisInfoCourse_Class = new ArrayList<InfoCourse_Class>();
+		btnSave.setEnabled(false);
+		btnCancel.setEnabled(false);
+		ArrayList<Transcript> lisInfoCourse_Class = new ArrayList<Transcript>();
 		try {
-			lisInfoCourse_Class = InfoCourse_Class.loadInfoTranscriptOfStudent(sid, semester, conn);
+			lisInfoCourse_Class = Transcript.findTranscriptOfTID(tid, ccid, conn);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -164,83 +259,67 @@ public class FrmTranscript extends JInternalFrame {
 		Object[] rows = new Object[10];
 		for(int i=0; i <lisInfoCourse_Class.size();i++ )
 		{    
-			rows[0]=lisInfoCourse_Class.get(i).getCid();
-			rows[1]=lisInfoCourse_Class.get(i).getCcid(); 
-			rows[2]=lisInfoCourse_Class.get(i).getName(); 
-			rows[3]=lisInfoCourse_Class.get(i).getRid();
-			rows[4]=lisInfoCourse_Class.get(i).getTid();
-			rows[5]=lisInfoCourse_Class.get(i).getSemester();
-			rows[6]=lisInfoCourse_Class.get(i).getDescription();
-			rows[7]=lisInfoCourse_Class.get(i).getNumOfCredits();
-			rows[8]=lisInfoCourse_Class.get(i).getDescriptionCourse(); 
+			rows[0]=lisInfoCourse_Class.get(i).getCcid();
+			rows[1]=lisInfoCourse_Class.get(i).getSid();
 			float score = Float.valueOf(lisInfoCourse_Class.get(i).getScore()); 
 			if(score == -1) {
-				rows[9] = "Chưa có điểm";
+				rows[2] = "Chưa có điểm";
 			}else {
-				rows[9]= score;
+				rows[2]= score;
 			}
 
 			model.addRow(rows); 
 		}
 	}
-	class SearchType{
-		private boolean type;
-		private String name;
-		public SearchType(boolean type, String name) {
-			this.type = type;
-			this.name = name;
-		}
-		public boolean isType() {
-			return type;
-		}
-		public void setType(boolean type) {
-			this.type = type;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
-	class SearchTypeRenderer extends BasicComboBoxRenderer
-	{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if(value instanceof SearchType){
-				SearchType val = (SearchType) value;
-				setText(val.getName());
+	public static void edit() {
+		String ccid = ((Course_Class)cbbCourse_Class.getSelectedItem()).getCcid();
+		int row = tabTranscript.getSelectedRow();
+		if(row!= -1) {
+			String sid = tabTranscript.getValueAt(row, 1).toString();
+			String score_org = txtScore.getText().trim();
+			float score;
+			try {
+				if(score_org.equals("") || score_org.equalsIgnoreCase("chưa có điểm")) {
+					score = -1;
+				}
+				else {
+					try {
+						score = Float.valueOf(score_org);
+						Transcript ts = new Transcript();
+						ts.setCcid(ccid);
+						ts.setSid(sid);
+						ts.setScore(score);
+						try {
+							if(Transcript.Edit(ts, conn) == 1) {
+								JOptionPane.showMessageDialog(tabTranscript, "Sửa Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+								DefaultTableModel model = (DefaultTableModel)tabTranscript.getModel();
+								model.setRowCount(0);
+								load();	
+							}
+							else {
+								JOptionPane.showMessageDialog(tabTranscript, "Sửa thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+							}
+						} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					catch(NumberFormatException ex) {
+						JOptionPane.showMessageDialog(tabTranscript, "Vui lòng nhập điểm là một số hoặc để trống (nếu chưa có điểm)",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+						ex.printStackTrace();
+						return;
+					}
+				}
+			} catch(Exception ex) {
+				ex.printStackTrace();
+				score = -1;
 			}
-			return this;
+		}
+		else {
+			JOptionPane.showMessageDialog(tabTranscript, "Sửa thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-	class Semester{
-		private int type;
-		private String name;
-		public Semester(int type, String name) {
-			this.type = type;
-			this.name = name;
-		}
-		public int getType() {
-			return type;
-		}
-		public void setType(int type) {
-			this.type = type;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
-	class SemesterRenderer extends BasicComboBoxRenderer
+	class Course_ClassRenderer extends BasicComboBoxRenderer
 	{
 		/**
 		 * 
@@ -250,9 +329,16 @@ public class FrmTranscript extends JInternalFrame {
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if(value instanceof Semester){
-				Semester val = (Semester) value;
-				setText(val.getName());
+			if(value instanceof Course_Class){
+				Course_Class val = (Course_Class) value;
+				String name = "";
+				try {
+					name = Course_Class.getNameCourseClass(val, conn);
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				setText(name);
 			}
 			return this;
 		}

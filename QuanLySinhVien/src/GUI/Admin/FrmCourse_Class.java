@@ -274,7 +274,7 @@ public class FrmCourse_Class extends JInternalFrame {
 		
 		ArrayList<Status> statuss = new ArrayList<Status>();
 		statuss.add(new Status(true, "Mở"));
-		statuss.add(new Status(true, "Đóng"));
+		statuss.add(new Status(false, "Đóng"));
 		cbbStatusModel = new DefaultComboBoxModel();
 		for(Status sts : statuss) {
 			cbbStatusModel.addElement(sts);

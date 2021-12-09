@@ -157,4 +157,21 @@ public class Teacher extends Person{
 		}
 		return null;
 	}
+	public static String getTIDofUserName(String userName, Connection conn) throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		String TID = "";
+		try {
+			String query = "select t.TID from Teacher t inner join Account a ON t.AID = a.AID where a.USERNAME = ?"; 
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, userName);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				TID = resultSet.getString(1);
+				return TID;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return TID;
+	}
 }

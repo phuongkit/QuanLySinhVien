@@ -5,14 +5,14 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -27,14 +27,10 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import GUI.InitGUI;
+import Model.Course_Class;
 import Model.InfoCourse_Class;
-import Model.Student;
+import Model.Teacher;
 import Model.Transcript;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JTextPane;
 
 public class FrmCourseRegister extends JInternalFrame {
 
@@ -44,7 +40,7 @@ public class FrmCourseRegister extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private static Connection conn = null;
-	private static String sid;
+	private static String tid;
 
 	private String FONT_TYPE;
 	private int FONT;
@@ -62,7 +58,7 @@ public class FrmCourseRegister extends JInternalFrame {
 	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
 	private static DefaultTableModel modelStudent = new DefaultTableModel(columnName,0);
 	private static JTable tabInfoCourse_Class = new JTable(model) ;
-	private static JTable tabInfoCourse_ClassStudent = new JTable(modelStudent) ;
+	private static JTable tabInfoCourse_ClassTeacher = new JTable(modelStudent) ;
 	private static JButton btnReLoad = new JButton("ReLoad");
 	private static JButton btnSearch = new JButton("Tìm");
 	private static JButton btnRegister = new JButton("Đăng Ký");
@@ -82,7 +78,7 @@ public class FrmCourseRegister extends JInternalFrame {
 	public FrmCourseRegister(String userName, Connection conn) {
 		((javax.swing.plaf.basic.BasicInternalFrameUI)this.getUI()).setNorthPane(null);
 		try {
-			this.sid = Student.getSIDofUserName(userName, conn);
+			this.tid = Teacher.getTIDofUserName(userName, conn);
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -153,17 +149,19 @@ public class FrmCourseRegister extends JInternalFrame {
 		lblDanhSachHocPhan.setBounds(10, 283, 242, 20);
 		contentPane.add(lblDanhSachHocPhan);
 		
-		JScrollPane scrollPaneStudent = new JScrollPane(tabInfoCourse_ClassStudent );
+		JScrollPane scrollPaneStudent = new JScrollPane(tabInfoCourse_ClassTeacher );
 		scrollPaneStudent.setBounds(0, 313, 948, 202);
 		contentPane.add(scrollPaneStudent);
 
 		btnRegisterCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row = tabInfoCourse_ClassStudent.getSelectedRow();
+				int row = tabInfoCourse_ClassTeacher.getSelectedRow();
 				if(row != -1) {
-					String ccid = tabInfoCourse_ClassStudent.getValueAt(row, 1).toString();
+					String ccid = tabInfoCourse_ClassTeacher.getValueAt(row, 1).toString();
 					try {
-						if(Transcript.Del(ccid, sid, conn)==0) {
+						Course_Class css = Course_Class.findCourse_Class(ccid, conn);
+						css.setTid(null);
+						if(Course_Class.Edit(css, conn)==0) {
 							JOptionPane.showMessageDialog(contentPane, "Hủy đăng ký thất bại!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
@@ -188,19 +186,15 @@ public class FrmCourseRegister extends JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				int row = tabInfoCourse_Class.getSelectedRow();
 				if(row != -1) {
-					String cid = tabInfoCourse_Class.getValueAt(row, 0).toString();
+					String ccid = tabInfoCourse_Class.getValueAt(row, 1).toString();
 					try {
-						if(Transcript.existsCourseStudent(cid, sid, conn)) {
-							JOptionPane.showMessageDialog(contentPane, "Môn học này bạn đã đăng ký! Vui lòng xóa đăng ký trước khi thử lại!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+						if(Course_Class.existsCourseTeacher(ccid, conn)) {
+							JOptionPane.showMessageDialog(contentPane, "Môn học này đã có giảng viên đăng ký!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
-							String ccid = tabInfoCourse_Class.getValueAt(row, 1).toString();
-							int semester = Integer.valueOf(tabInfoCourse_Class.getValueAt(row, 5).toString());
-							Transcript ts = new Transcript();
-							ts.setCcid(ccid);
-							ts.setSemester(semester);
-							ts.setSid(sid);
-							if(Transcript.Insert(ts, conn)==0) {
+							Course_Class css = Course_Class.findCourse_Class(ccid, conn);
+							css.setTid(tid);
+							if(Course_Class.Edit(css, conn)==0) {
 								JOptionPane.showMessageDialog(contentPane, "Đăng ký thất bại!",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 							}
 							else {
@@ -253,28 +247,28 @@ public class FrmCourseRegister extends JInternalFrame {
 
 			model.addRow(rows); 
 		}
-		ArrayList<InfoCourse_Class> lisInfoCourse_ClassStudent = new ArrayList<InfoCourse_Class>();
+		ArrayList<InfoCourse_Class> lisInfoCourse_ClassTeacher = new ArrayList<InfoCourse_Class>();
 		try {
-			lisInfoCourse_ClassStudent = InfoCourse_Class.loadInfoOfStudent(sid, conn);
+			lisInfoCourse_ClassTeacher = InfoCourse_Class.loadInfoOfTeacher(tid, true, conn);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DefaultTableModel modelStudent = (DefaultTableModel)tabInfoCourse_ClassStudent.getModel();
+		DefaultTableModel modelStudent = (DefaultTableModel)tabInfoCourse_ClassTeacher.getModel();
 		if(modelStudent.getRowCount() > 0) {
 			modelStudent.setRowCount(0);
 		}
-		for(int i=0; i < lisInfoCourse_ClassStudent.size();i++ )
+		for(int i=0; i < lisInfoCourse_ClassTeacher.size();i++ )
 		{    
-			rows[0]=lisInfoCourse_ClassStudent.get(i).getCid(); 
-			rows[1]=lisInfoCourse_ClassStudent.get(i).getCcid();
-			rows[2]=lisInfoCourse_ClassStudent.get(i).getName();  
-			rows[3]=lisInfoCourse_ClassStudent.get(i).getRid();
-			rows[4]=lisInfoCourse_ClassStudent.get(i).getTid();
-			rows[5]=lisInfoCourse_ClassStudent.get(i).getSemester();
-			rows[6]=lisInfoCourse_ClassStudent.get(i).getDescription();
-			rows[7]=lisInfoCourse_ClassStudent.get(i).getNumOfCredits();
-			rows[8]=lisInfoCourse_ClassStudent.get(i).getDescriptionCourse(); 
+			rows[0]=lisInfoCourse_ClassTeacher.get(i).getCid(); 
+			rows[1]=lisInfoCourse_ClassTeacher.get(i).getCcid();
+			rows[2]=lisInfoCourse_ClassTeacher.get(i).getName();  
+			rows[3]=lisInfoCourse_ClassTeacher.get(i).getRid();
+			rows[4]=lisInfoCourse_ClassTeacher.get(i).getTid();
+			rows[5]=lisInfoCourse_ClassTeacher.get(i).getSemester();
+			rows[6]=lisInfoCourse_ClassTeacher.get(i).getDescription();
+			rows[7]=lisInfoCourse_ClassTeacher.get(i).getNumOfCredits();
+			rows[8]=lisInfoCourse_ClassTeacher.get(i).getDescriptionCourse(); 
 
 			modelStudent.addRow(rows); 
 		}

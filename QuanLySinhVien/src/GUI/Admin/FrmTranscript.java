@@ -69,7 +69,7 @@ public class FrmTranscript extends JInternalFrame {
 	private static JComboBox cbbSemester;
 	private static DefaultComboBoxModel cbbSemesterModel;
 	private static ArrayList<Transcript> lisTranscript = new ArrayList<Transcript>();
-	private static String[] columnName = {"Lớp Học", "Sinh Viên", "Điểm", "Học Kỳ"};
+	private static String[] columnName = {"Lớp Học", "Sinh Viên", "Điểm"};
 	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
 	private static JTable tabTranscript = new JTable(model) ;
 	private static JButton btnCancel = new JButton("Hủy");
@@ -170,11 +170,6 @@ public class FrmTranscript extends JInternalFrame {
 		lblScore.setBounds(594, 20, 122, 38);
 		contentPane.add(lblScore);
 
-		JLabel lblSemester = new JLabel("Học Kỳ");
-		lblSemester.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		lblSemester.setBounds(594, 56, 122, 38);
-		contentPane.add(lblSemester);
-
 		ArrayList<Course_Class> course_Classs = new ArrayList<Course_Class>();
 		try {
 			course_Classs = Course_Class.load(conn);
@@ -217,27 +212,6 @@ public class FrmTranscript extends JInternalFrame {
 		txtScore.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		txtScore.setBounds(699, 26, 141, 27);
 		contentPane.add(txtScore);
-
-		ArrayList<Semester> semesters = new ArrayList<Semester>();
-		semesters.add(new Semester(1, "Học Kỳ I"));
-		semesters.add(new Semester(2, "Học Kỳ II"));
-		semesters.add(new Semester(3, "Học Kỳ III"));
-		semesters.add(new Semester(4, "Học Kỳ IV"));
-		semesters.add(new Semester(5, "Học Kỳ V"));
-		semesters.add(new Semester(6, "Học Kỳ VI"));
-		semesters.add(new Semester(7, "Học Kỳ VII"));
-		semesters.add(new Semester(8, "Học Kỳ VIII"));
-		cbbSemesterModel = new DefaultComboBoxModel();
-		for(Semester smt : semesters) {
-			cbbSemesterModel.addElement(smt);
-		}
-
-		cbbSemester = new JComboBox();
-		cbbSemester.setModel(cbbSemesterModel);
-		cbbSemester.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
-		cbbSemester.setBounds(699, 62, 216, 27);
-		cbbSemester.setRenderer(new SemesterRenderer());
-		contentPane.add(cbbSemester);
 
 		JLabel lblFilter = new JLabel("Lọc");
 		lblFilter.setFont(new Font("Dialog", Font.PLAIN, 16));
@@ -394,7 +368,6 @@ public class FrmTranscript extends JInternalFrame {
 			}else {
 				rows[2]=score;
 			}
-			rows[3]=(lisTranscript.get(i).getSemester());
 
 			model.addRow(rows); 
 		}
@@ -420,7 +393,6 @@ public class FrmTranscript extends JInternalFrame {
 		ts.setCcid(ccid);
 		ts.setSid(sid);
 		ts.setScore(score);
-		ts.setSemester(semester);
 		try {
 			if(Transcript.Insert(ts, conn) == 1) {
 				JOptionPane.showMessageDialog(tabTranscript, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
@@ -456,14 +428,12 @@ public class FrmTranscript extends JInternalFrame {
 		ts.setCcid(ccid);
 		ts.setSid(sid);
 		ts.setScore(score);
-		ts.setSemester(semester);
 		try {
 			if(Transcript.Edit(ts, conn) == 1) {
 				JOptionPane.showMessageDialog(tabTranscript, "Sửa Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
 				for(int i=0; i< lisTranscript.size();i++){
 					if(lisTranscript.get(i).getCcid().equals(ccid) && lisTranscript.get(i).getSid().equals(sid)) {
 						lisTranscript.get(i).setScore(score);
-						lisTranscript.get(i).setSemester(semester);
 						break;
 					}
 
@@ -518,7 +488,6 @@ public class FrmTranscript extends JInternalFrame {
 				}else {
 					rows[2]=score;
 				}
-				rows[3]=(lisTranscript.get(i).getSemester());
 
 				model.addRow(rows); 
 			}
@@ -545,7 +514,6 @@ public class FrmTranscript extends JInternalFrame {
 				}else {
 					rows[2]=score;
 				}
-				rows[3]=(lisTranscript.get(i).getSemester());
 
 				model.addRow(rows); 
 			}
@@ -572,7 +540,6 @@ public class FrmTranscript extends JInternalFrame {
 				}else {
 					rows[2]=score;
 				}
-				rows[3]=transcript.getSemester();
 
 				model.addRow(rows); 
 			}

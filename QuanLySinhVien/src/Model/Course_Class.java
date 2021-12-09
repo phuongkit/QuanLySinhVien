@@ -250,4 +250,22 @@ public class Course_Class {
 		}
 		return name;
 	}
+	public static boolean existsCourseTeacher(String ccid, Connection conn) throws ClassNotFoundException, SQLException {
+		try {
+			String query = "select TID from Course_Class where CCID = ?";
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1,ccid);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				String tid = resultSet.getString(1);
+				if(tid == null || tid.equals("") == true) {
+					return false;
+				}
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

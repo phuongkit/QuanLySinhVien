@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import GUI.FrmLogin;
 import GUI.InitGUI;
 import GUI.Student.*;
+import GUI.Teacher.FrmTeachCourse_ClassList;
 
 public class FrmManHinhChinh  extends JFrame{
 	private static int SCREEN_HEIGHT;
@@ -36,6 +37,7 @@ public class FrmManHinhChinh  extends JFrame{
 	private static JMenuItem mnItemDanhSachHocPhan;
 	private static JMenuItem mnItemDangKyHocPhan;
 	private static JMenuItem mnItemTraCuuHocPhan;
+	private static JMenuItem mnItemDanhSachLopHocPhanHoc;
 	private static JMenuItem mnItemBangDiem;
 	private static JDesktopPane desktopPane;
 
@@ -45,6 +47,7 @@ public class FrmManHinhChinh  extends JFrame{
 	private static FrmCourseList frmCL;
 	private static FrmCourseRegister frmCR;
 	private static FrmCourseSearch frmCS;
+	private static FrmStudyCourse_ClassList frmSCSS;
 	private static FrmTranscript frmTS;
 	
 	public FrmManHinhChinh(FrmLogin frmLG, Connection conn, String userName) {
@@ -154,6 +157,22 @@ public class FrmManHinhChinh  extends JFrame{
 		});
 		mnDanhMuc.add(mnItemTraCuuHocPhan);
 		
+		mnItemDanhSachLopHocPhanHoc = new JMenuItem("Danh sách học phần đang học");
+		mnItemDanhSachLopHocPhanHoc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
+					frmChild.dispose();
+				}
+				if(frmSCSS == null || frmSCSS.isClosed()) {
+					frmSCSS = new FrmStudyCourse_ClassList(userName, conn);
+					desktopPane.add(frmSCSS);
+				}
+				frmSCSS.setBounds(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				frmSCSS.setResizable(false);
+				frmSCSS.setVisible(true);
+			}
+		});
+		mnDanhMuc.add(mnItemDanhSachLopHocPhanHoc);
 		
 		mnItemBangDiem = new JMenuItem("Bảng Điểm");
 		mnItemBangDiem.addActionListener(new ActionListener() {
@@ -189,6 +208,7 @@ public class FrmManHinhChinh  extends JFrame{
 		frmCL = null;
 		frmCR = null;
 		frmCS = null;
+		frmSCSS = null;
 		frmTS = null;
 		for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
 			frmChild.dispose();

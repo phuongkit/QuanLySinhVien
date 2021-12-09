@@ -221,8 +221,16 @@ public class FrmManHinhChinh extends JFrame{
 		Load();
 	}
 	public void Load() {
+		frmLG = null;
+		frmMHC = null;
+		frmTTCN = null;
+		frmAC = null;
+		frmGV = null;
+		frmSV = null;
+		frmTS = null;
+		frmCS = null;
+		frmCSS = null;
 		for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
-			frmChild=null;
 			frmChild.dispose();
 		}
 		if(frmTTCN == null || frmTTCN.isClosed()) {

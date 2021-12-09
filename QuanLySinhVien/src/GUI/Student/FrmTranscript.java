@@ -55,7 +55,7 @@ public class FrmTranscript extends JInternalFrame {
 	private static DefaultComboBoxModel cbbSemesterModel;
 	private static JTextField txtSearch;
 	private static ArrayList<Transcript> lisInfoCourse_Class = new ArrayList<Transcript>();
-	private static String[] columnName = {"Mã Môn Học", "Mã Lớp Học Phần", "Tên Học Phần", "Phòng", "Giảng Viên", "Học Kỳ", "Mô Tả Lớp", "Số Tín Chỉ", "Mô Tả Môn Học", "Điểm"};
+	private static String[] columnName = {"Mã Môn Học", "Mã Lớp Học Phần", "Tên Học Phần", "Điểm" , "Học Kỳ"};
 	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
 	private static JTable tabTranscript = new JTable(model) ;
 	private static JButton btnReLoad = new JButton("ReLoad");
@@ -169,18 +169,13 @@ public class FrmTranscript extends JInternalFrame {
 			rows[0]=lisInfoCourse_Class.get(i).getCid();
 			rows[1]=lisInfoCourse_Class.get(i).getCcid(); 
 			rows[2]=lisInfoCourse_Class.get(i).getName(); 
-			rows[3]=lisInfoCourse_Class.get(i).getRid();
-			rows[4]=lisInfoCourse_Class.get(i).getTid();
-			rows[5]=lisInfoCourse_Class.get(i).getSemester();
-			rows[6]=lisInfoCourse_Class.get(i).getDescription();
-			rows[7]=lisInfoCourse_Class.get(i).getNumOfCredits();
-			rows[8]=lisInfoCourse_Class.get(i).getDescriptionCourse(); 
 			float score = Float.valueOf(lisInfoCourse_Class.get(i).getScore()); 
 			if(score == -1) {
-				rows[9] = "Chưa có điểm";
+				rows[3] = "Chưa có điểm";
 			}else {
-				rows[9]= score;
+				rows[3]= score;
 			}
+			rows[4]=lisInfoCourse_Class.get(i).getSemester();
 
 			model.addRow(rows); 
 		}
