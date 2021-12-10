@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import GUI.FrmLogin;
 import GUI.InitGUI;
 import Model.Account;
+import java.awt.Color;
 
 public class FrmChangePassword extends JDialog{
 	private static Connection conn;
@@ -118,6 +119,7 @@ public class FrmChangePassword extends JDialog{
 		contentPane.add(pwfReEnterPassword);
 
 		cbShowPassword = new JCheckBox();
+		cbShowPassword.setBackground(new Color(175, 238, 238));
 		cbShowPassword.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		cbShowPassword.setBounds(132, 270, 30, 20);
 		cbShowPassword.addItemListener(new ItemListener() {

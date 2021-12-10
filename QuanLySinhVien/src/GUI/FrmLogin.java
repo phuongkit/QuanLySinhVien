@@ -55,6 +55,7 @@ public class FrmLogin extends JFrame{
 	private GUI.Teacher.FrmManHinhChinh frmMHCTeacher;
 	private GUI.Student.FrmManHinhChinh frmMHCStudent;
 	public FrmLogin() {
+		getContentPane().setBackground(new Color(224, 255, 255));
 		frmLG = this;
 		setBackground(new Color(138, 43, 226));
 		Init();
@@ -67,6 +68,7 @@ public class FrmLogin extends JFrame{
 		lblUserName = new JLabel("Username:");
 		lblUserName.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblUserName.setBounds(30, 42, 120, COMPONENTS_HEIGHT);
+		lblUserName.setIcon(new ImageIcon("resources/username.png"));
 		pnlMain.add(lblUserName);
 
 		txtUserName = new JTextField();
@@ -77,6 +79,7 @@ public class FrmLogin extends JFrame{
 		lblPassWord = new JLabel("PassWord:");
 		lblPassWord.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		lblPassWord.setBounds(30, 92, 120, COMPONENTS_HEIGHT);
+		lblPassWord.setIcon(new ImageIcon("resources/password.png"));
 		pnlMain.add(lblPassWord);
 
 		pwfPassWord = new JPasswordField(10);
@@ -90,6 +93,7 @@ public class FrmLogin extends JFrame{
 		pnlMain.add(lblPermission);
 		
 		rbAdmin = new JRadioButton();
+		rbAdmin.setBackground(new Color(224, 255, 255));
 		rbAdmin.setBounds(160, 138, 20, 40);
 		rbAdmin.setSelected(true);
 		pnlMain.add(rbAdmin);
@@ -100,6 +104,7 @@ public class FrmLogin extends JFrame{
 		pnlMain.add(lblAdmin);
 		
 		rbStudent = new JRadioButton();
+		rbStudent.setBackground(new Color(224, 255, 255));
 		rbStudent.setBounds(240, 138, 20, 40);
 		pnlMain.add(rbStudent);
 		
@@ -109,6 +114,7 @@ public class FrmLogin extends JFrame{
 		pnlMain.add(lblStudent);
 
 		rbTeacher = new JRadioButton();
+		rbTeacher.setBackground(new Color(224, 255, 255));
 		rbTeacher.setBounds(330, 138, 20, 40);
 		pnlMain.add(rbTeacher);
 		
@@ -124,6 +130,7 @@ public class FrmLogin extends JFrame{
         group.add(rbTeacher);
 		
 		cbShowPassWord = new JCheckBox();
+		cbShowPassWord.setBackground(new Color(224, 255, 255));
 		cbShowPassWord.setBounds(150, 180, 30, COMPONENTS_HEIGHT);
 		cbShowPassWord.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -143,6 +150,8 @@ public class FrmLogin extends JFrame{
 		pnlMain.add(lblShowPassWord);
 
 		btnLogin = new JButton("Login");
+		btnLogin.setForeground(new Color(0, 0, 0));
+		btnLogin.setBackground(new Color(173, 255, 47));
 		btnLogin.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnLogin.setBounds(110, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnLogin.setIcon(new ImageIcon("resources/login.png"));
@@ -198,6 +207,8 @@ public class FrmLogin extends JFrame{
 		pnlMain.add(btnLogin);
 		
 		btnExit = new JButton("Exit");
+		btnExit.setForeground(new Color(0, 0, 0));
+		btnExit.setBackground(new Color(173, 255, 47));
 		btnExit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnExit.setBounds(290, 240, BUTTON_WIDTH, BUTTON_HEIGHT);
 		btnExit.setIcon(new ImageIcon("resources/exit.png"));

@@ -30,8 +30,6 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import GUI.InitGUI;
-import GUI.Admin.FrmCourse_Class.Semester;
-import GUI.Admin.FrmCourse_Class.SemesterRenderer;
 import GUI.Admin.FrmStudent.AccountRenderer;
 import GUI.Admin.FrmStudent.FacultyRenderer;
 import GUI.Admin.FrmStudent.Gender;
@@ -66,8 +64,6 @@ public class FrmTranscript extends JInternalFrame {
 	private static JComboBox cbbSID;
 	private static DefaultComboBoxModel cbbSIDModel;
 	private static JTextField txtScore;
-	private static JComboBox cbbSemester;
-	private static DefaultComboBoxModel cbbSemesterModel;
 	private static ArrayList<Transcript> lisTranscript = new ArrayList<Transcript>();
 	private static String[] columnName = {"Lớp Học", "Sinh Viên", "Điểm"};
 	private static DefaultTableModel model = new DefaultTableModel(columnName,0);
@@ -136,17 +132,6 @@ public class FrmTranscript extends JInternalFrame {
 					cbbSID.setSelectedIndex(index);
 
 					txtScore.setText(tabTranscript.getValueAt(row, 2).toString());
-					int semester = Integer.valueOf(tabTranscript.getValueAt(row, 3).toString());
-					index = -1;
-					for(int i=0;i<cbbSemesterModel.getSize();i++) {	
-						Semester tc = (Semester) cbbSemesterModel.getElementAt(i);
-						if(semester == tc.getType()) {
-							index=i;
-							break;
-						}
-					}
-					cbbSemester.setSelectedIndex(index);
-
 				}
 			}
 
@@ -385,26 +370,25 @@ public class FrmTranscript extends JInternalFrame {
 			else {
 				score = Float.valueOf(score_org);
 			}
+			ts.setCcid(ccid);
+			ts.setSid(sid);
+			ts.setScore(score);
+			try {
+				if(Transcript.Insert(ts, conn) == 1) {
+					JOptionPane.showMessageDialog(tabTranscript, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+					lisTranscript.add(ts);
+					load();
+				}
+				else
+					JOptionPane.showMessageDialog(tabTranscript, "Thêm thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+
+			} catch (ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			score = -1;
-		}
-		int semester = ((Semester)cbbSemester.getSelectedItem()).getType();
-		ts.setCcid(ccid);
-		ts.setSid(sid);
-		ts.setScore(score);
-		try {
-			if(Transcript.Insert(ts, conn) == 1) {
-				JOptionPane.showMessageDialog(tabTranscript, "Thêm Thành Công",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-				lisTranscript.add(ts);
-				load();
-			}
-			else
-				JOptionPane.showMessageDialog(tabTranscript, "Thêm thất bại",  "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-
-		} catch (ClassNotFoundException | SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 	}
 	public static void Edit() {
@@ -424,7 +408,6 @@ public class FrmTranscript extends JInternalFrame {
 			ex.printStackTrace();
 			score = -1;
 		}
-		int semester = ((Semester)cbbSemester.getSelectedItem()).getType();
 		ts.setCcid(ccid);
 		ts.setSid(sid);
 		ts.setScore(score);
@@ -556,44 +539,6 @@ public class FrmTranscript extends JInternalFrame {
 		cbbCCID.setSelectedIndex(-1);
 		cbbSID.setSelectedIndex(-1);
 		txtScore.setText("");
-		cbbSemester.setSelectedIndex(-1);
-	}
-	class Semester{
-		private int type;
-		private String name;
-		public Semester(int type, String name) {
-			this.type = type;
-			this.name = name;
-		}
-		public int getType() {
-			return type;
-		}
-		public void setType(int type) {
-			this.type = type;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
-	class SemesterRenderer extends BasicComboBoxRenderer
-	{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if(value instanceof Semester){
-				Semester val = (Semester) value;
-				setText(val.getName());
-			}
-			return this;
-		}
 	}
 	class CCIDRenderer extends BasicComboBoxRenderer
 	{

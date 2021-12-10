@@ -26,6 +26,7 @@ import javax.swing.JButton;
 
 import Model.Account;
 import Model.Admin;
+import java.awt.Color;
 
 public class FrmPersonalInformation  extends JInternalFrame{
 	private static Connection conn = null;

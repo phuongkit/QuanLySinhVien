@@ -1,5 +1,6 @@
 package GUI.Admin;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.HeadlessException;
@@ -108,7 +109,7 @@ public class FrmCourse_Class extends JInternalFrame {
 				int row = tabCourse_Class.getSelectedRow();
 				if(row != -1 && flag == 0) {
 					int index;
-					
+
 					String cid = tabCourse_Class.getValueAt(row, 0).toString();
 					index = -1;
 					for(int i=0;i<cbbCIDModel.getSize();i++) {	
@@ -119,9 +120,9 @@ public class FrmCourse_Class extends JInternalFrame {
 						}
 					}
 					cbbCID.setSelectedIndex(index);
-					
+
 					txtCCID.setText(tabCourse_Class.getValueAt(row, 1).toString());
-					
+
 					String rid = tabCourse_Class.getValueAt(row, 2).toString();
 					index = -1;
 					for(int i=0;i<cbbRIDModel.getSize();i++) {	
@@ -132,7 +133,7 @@ public class FrmCourse_Class extends JInternalFrame {
 						}
 					}
 					cbbRID.setSelectedIndex(index);
-					
+
 					String tid = tabCourse_Class.getValueAt(row, 3).toString();
 					index = -1;
 					for(int i=0;i<cbbTIDModel.getSize();i++) {	
@@ -143,7 +144,7 @@ public class FrmCourse_Class extends JInternalFrame {
 						}
 					}
 					cbbTID.setSelectedIndex(index);
-					
+
 					Boolean status = Boolean.valueOf(tabCourse_Class.getValueAt(row, 4).toString());
 					if(status) {
 						cbbStatus.setSelectedIndex(0);
@@ -151,7 +152,7 @@ public class FrmCourse_Class extends JInternalFrame {
 					else {
 						cbbStatus.setSelectedIndex(1);
 					}
-					
+
 					int semester = Integer.valueOf(tabCourse_Class.getValueAt(row, 5).toString());
 					index = -1;
 					for(int i=0;i<cbbSemesterModel.getSize();i++) {	
@@ -162,7 +163,7 @@ public class FrmCourse_Class extends JInternalFrame {
 						}
 					}
 					cbbSemester.setSelectedIndex(index);
-					
+
 					txtDescription.setText(tabCourse_Class.getValueAt(row, 6).toString());
 				}
 			}
@@ -252,7 +253,7 @@ public class FrmCourse_Class extends JInternalFrame {
 		cbbRID.setBounds(152, 94, 167, 27);
 		cbbRID.setRenderer(new RIDRenderer());
 		contentPane.add(cbbRID);
-		
+
 		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
 		try {
 			teachers = Teacher.load(conn);
@@ -271,7 +272,7 @@ public class FrmCourse_Class extends JInternalFrame {
 		cbbTID.setBounds(152, 136, 216, 27);
 		cbbTID.setRenderer(new TIDRenderer());
 		contentPane.add(cbbTID);
-		
+
 		ArrayList<Status> statuss = new ArrayList<Status>();
 		statuss.add(new Status(true, "Mở"));
 		statuss.add(new Status(false, "Đóng"));
@@ -651,11 +652,20 @@ public class FrmCourse_Class extends JInternalFrame {
 			if(value instanceof Course){
 				Course val = (Course) value;
 				setText(val.getName());
-				try {
-					txtCCID.setText(Course_Class.getCCIDCourse_Class(val.getCid(), conn));
-				} catch (ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(flag == -1) {
+					try {
+						txtCCID.setText(Course_Class.getCCIDCourse_Class(val.getCid(), conn));
+					} catch (ClassNotFoundException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else {
+					int row = tabCourse_Class.getSelectedRow();
+					if(row!=-1) {
+						String ccid = tabCourse_Class.getValueAt(row, 1).toString();
+						txtCCID.setText(ccid);
+					}
 				}
 			}
 			return this;

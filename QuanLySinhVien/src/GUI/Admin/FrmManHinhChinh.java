@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import GUI.FrmLogin;
 import GUI.InitGUI;
+import java.awt.Color;
 
 public class FrmManHinhChinh extends JFrame{
 	private static int SCREEN_HEIGHT;
@@ -70,6 +71,7 @@ public class FrmManHinhChinh extends JFrame{
 		getContentPane().add(desktopPane);
 
 		menuBar = new JMenuBar();
+		menuBar.setBackground(new Color(255, 255, 255));
 		setJMenuBar(menuBar);
 
 		mnTaiKhoan = new JMenu("Tài Khoản");
@@ -193,7 +195,7 @@ public class FrmManHinhChinh extends JFrame{
 		});
 		mnQuanLy.add(mnItemQLLop);
 
-		mnItemQLChiTietLop = new JMenuItem("Quản Lý Học Phần Con");
+		mnItemQLChiTietLop = new JMenuItem("Quản Lý Lớp Học Phần");
 		mnItemQLChiTietLop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
