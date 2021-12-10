@@ -174,6 +174,7 @@ public class FrmTranscript extends JInternalFrame {
 		});
 		btnEdit.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
 		btnEdit.setBounds(257, 450, 107, 40);
+		btnEdit.setIcon(new ImageIcon("resources/edit.png"));
 		contentPane.add(btnEdit);
 
 		btnSave.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
@@ -187,6 +188,7 @@ public class FrmTranscript extends JInternalFrame {
 				edit();
 			}
 		});
+		btnSave.setIcon(new ImageIcon("resources/save.jpg"));
 		contentPane.add(btnSave);
 
 		btnCancel.setFont(new Font(FONT_TYPE, FONT, FONT_SIZE));
@@ -200,6 +202,7 @@ public class FrmTranscript extends JInternalFrame {
 				load();
 			}
 		});
+		btnCancel.setIcon(new ImageIcon("resources/cancel.png"));
 		contentPane.add(btnCancel);
 
 		txtScore.setBounds(598, 45, 196, 33);

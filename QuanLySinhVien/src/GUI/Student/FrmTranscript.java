@@ -151,7 +151,7 @@ public class FrmTranscript extends JInternalFrame {
 		load();
 	}
 	public static void load() {
-		
+		System.out.println(sid);
 		ArrayList<InfoCourse_Class> lisInfoCourse_Class = new ArrayList<InfoCourse_Class>();
 		try {
 			lisInfoCourse_Class = InfoCourse_Class.loadInfoTranscriptOfStudent(sid, semester, conn);
@@ -163,7 +163,7 @@ public class FrmTranscript extends JInternalFrame {
 		if(model.getRowCount() > 0) {
 			model.setRowCount(0);
 		}
-		Object[] rows = new Object[10];
+		Object[] rows = new Object[5];
 		for(int i=0; i <lisInfoCourse_Class.size();i++ )
 		{    
 			rows[0]=lisInfoCourse_Class.get(i).getCid();
