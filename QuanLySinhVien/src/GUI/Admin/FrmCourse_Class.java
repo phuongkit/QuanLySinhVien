@@ -134,16 +134,22 @@ public class FrmCourse_Class extends JInternalFrame {
 					}
 					cbbRID.setSelectedIndex(index);
 
-					String tid = tabCourse_Class.getValueAt(row, 3).toString();
-					index = -1;
-					for(int i=0;i<cbbTIDModel.getSize();i++) {	
-						Teacher tc = (Teacher) cbbTIDModel.getElementAt(i);
-						if(tid.equals(tc.getId())) {
-							index=i;
-							break;
-						}
+					Object obj = tabCourse_Class.getValueAt(row, 3);
+					if(obj == null) {
+						cbbTID.setSelectedIndex(0);
 					}
-					cbbTID.setSelectedIndex(index);
+					else {
+						String tid = tabCourse_Class.getValueAt(row, 3).toString();
+						index = -1;
+						for(int i=0;i<cbbTIDModel.getSize();i++) {	
+							Teacher tc = (Teacher) cbbTIDModel.getElementAt(i);
+							if(tid.equals(tc.getId())) {
+								index=i;
+								break;
+							}
+						}
+						cbbTID.setSelectedIndex(index);
+					}
 
 					Boolean status = Boolean.valueOf(tabCourse_Class.getValueAt(row, 4).toString());
 					if(status) {
@@ -262,6 +268,11 @@ public class FrmCourse_Class extends JInternalFrame {
 			e1.printStackTrace();
 		}
 		cbbTIDModel = new DefaultComboBoxModel();
+		Teacher tct = new Teacher();
+		tct.setId(null);
+		tct.setName("");
+		tct.setAddress(null);
+		cbbTIDModel.addElement(tct);
 		for(Teacher tc : teachers) {
 			cbbTIDModel.addElement(tc);
 		}
