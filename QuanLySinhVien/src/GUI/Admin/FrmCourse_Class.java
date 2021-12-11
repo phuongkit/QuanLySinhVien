@@ -138,7 +138,7 @@ public class FrmCourse_Class extends JInternalFrame {
 					if(obj == null) {
 						cbbTID.setSelectedIndex(0);
 					}
-					else {
+					else { 
 						String tid = tabCourse_Class.getValueAt(row, 3).toString();
 						index = -1;
 						for(int i=0;i<cbbTIDModel.getSize();i++) {	
