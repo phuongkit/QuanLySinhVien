@@ -189,7 +189,7 @@ public class Transcript {
 		ArrayList<Transcript> listTranscripts = new ArrayList<Transcript>();
 		Transcript tr = new Transcript();
 		try {
-			String query = "select t.CCID, t.SID, t.SCORE from Transcript t inner join Course_Class cc on t.CCID = cc.CCID where cc.TID = ? and cc.STATUS = 0 "; 
+			String query = "select t.CCID, t.SID, t.SCORE from Transcript t inner join Course_Class cc on t.CCID = cc.CCID where cc.TID = ?"; 
 			if(!ccid.equals("")) {
 				query = query + " and cc.CCID = ?";
 			}
