@@ -178,7 +178,7 @@ public class FrmManHinhChinh  extends JFrame{
 				for (JInternalFrame frmChild : desktopPane.getAllFrames()) {
 					frmChild.dispose();
 				}
-				if(frmTS == null || frmCS.isClosed()) {
+				if(frmTS == null || frmTS.isClosed()) {
 					frmTS = new FrmTranscript(userName, conn);
 					desktopPane.add(frmTS);
 				}
